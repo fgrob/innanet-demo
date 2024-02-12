@@ -39,7 +39,7 @@
     <table class="table table-bordered align-middle">
         <thead>
             <th></th>
-            <th>Enero</th>
+            <!-- <th>Enero</th> -->
             <th>Febrero</th>
             <th>Marzo</th>
             <th>Abril</th>
@@ -55,9 +55,10 @@
         <tbody>
             <tr>
                 {% for mes in historial_ventas %}
-                    {% if mes.month == 1 %}
+                    <td class="fw-bold">2024</td>
+                    <!-- {% if mes.month == 1 %}
                         <td class="fw-bold">{{mes.year}}</td>
-                    {% endif %}
+                    {% endif %} -->
                     <td>
                         <span class="text-success fw-bold" style="font-size:14px">{{mes.total | formato_peso}}</span> 
                         <br>
@@ -79,7 +80,7 @@
     <table class="table table-bordered align-middle">
         <thead>
             <th></th>
-            <th>Enero</th>
+            <!-- <th>Enero</th> -->
             <th>Febrero</th>
             <th>Marzo</th>
             <th>Abril</th>
@@ -95,9 +96,10 @@
         <tbody>
             <tr>
                 {% for mes in historial_abonos %}
-                    {% if mes.month == 1 %}
+                <td class="fw-bold">2024</td>
+                    <!-- {% if mes.month == 1 %}
                         <td class="fw-bold">{{mes.year}}</td>
-                    {% endif %}
+                    {% endif %} -->
                     <td>
                         <span class="text-warning fw-bold" style="font-size:14px">{{mes.total | formato_peso}}</span> 
                         <br>
