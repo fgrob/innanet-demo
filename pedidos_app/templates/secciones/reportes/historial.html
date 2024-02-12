@@ -1,0 +1,39 @@
+{% extends 'base.html' %} 
+{% block title %}Historial{% endblock %} 
+{% block head %}
+<!-- Datatables  -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.3/fh-3.2.1/datatables.min.css" />
+{% endblock %}
+{% block navtitulo %}Historial{% endblock %} 
+{% block container %}
+
+<br>
+<table id="tabla-historial" class="display table text-center align-middle" width="100%">
+    <thead>
+      <th>Fecha</th>
+      <th style="display:none;">Fecha*</th> <!--columna auxiliar para el sorting de la tabla-->
+      <th>Usuario</th>
+      <th>Acción</th>
+      <th>Tabla</th>
+      <th>Contenido</th>
+      <th>Cambios</th>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<!--cargar archivo javascript -->
+{% load static %}
+<script src="{% static "js/historial.js" %}"></script>
+
+<!-- datatables:  -->
+<script type="text/javascript"
+src="https://cdn.datatables.net/v/dt/dt-1.11.3/fh-3.2.1/datatables.min.js"></script>
+
+<!--moment(formato javascript para las fechas)-->
+<script type="text/javascript"
+src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script type="text/javascript"
+src="//cdn.datatables.net/plug-ins/1.10.21/sorting/datetime-moment.js"></script>
+
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %} Basarse en Presupuesto {% endblock %}
+
+{% block head %} {% endblock %}
+
+{% block navtitulo %}Presupuesto Base{% endblock %}
+
+{% block container %}
+
+<br>
+
+<div class="row text-center">
+    <div class="col border">
+        <h4>Pedido ID {{pedido_base.id}} - {{pedido_base.cliente}}</h4>
+        <h5>{{pedido_base.producto}} - {{pedido_base.medidas}} - {{pedido_base.color}}</h5>
+        <p class="fst-italic">Pedido base</p>
+
+    </div>
+    <div class="col border">
+        <h4>Pedido ID {{pedido_ref.id}} - {{pedido_ref.cliente}}</h4>
+        <h5>{{pedido_ref.producto}} - {{pedido_ref.medidas}} - {{pedido_ref.color}}</h5>
+        <p class="fst-italic">Pedido de referencia (se copiara el presupuesto de este pedido en el base)</p>
+
+    </div>
+</div>
+
+<br>
+<div class="row justify-content-center">
+    <div class="col text-end">
+        <a href="/seleccionarpresupuesto" class="btn btn-dark text-nowrap">Seleccionar otro</a>
+    </div>
+    <div class="col text-start">
+        <a href="/pedido/{{pedido_ref.id}}/ref/copiar" class="btn btn-success">Copiar</a>
+    </div>
+</div> 
+{% endblock %}

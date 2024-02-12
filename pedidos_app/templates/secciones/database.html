@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% block title %} Base de datos{% endblock %}
+
+{% block head %}
+<!-- Datatables  -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.3/fh-3.2.1/datatables.min.css" />
+{% endblock %}
+
+{% block navtitulo %}Base de datos{% endblock %}
+
+{% block container %}
+
+{% load filtros %}
+<div class="row justify-content-end">
+    <div class="col-3 selectors">
+    </div>
+    <hr>
+</div>
+
+<br>
+<table id="tabla-database" class="display table table-bordered table-striped text-center align-middle" width="100%">
+    <thead>
+        <tr class="align-middle">
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <!-- <th>Maestros</th> -->
+            <th>Fecha Ingreso</th>
+            <th>Fecha Término</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>              
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="dashModal" tabindex="-1" aria-labelledby="dashModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title col-11" id="dashModalLabel"></h5>
+                <button type="button" class="btn-close col-1" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6">
+                        <table class="table table-warning table-bordered">
+                            <tr>
+                                <th>Fecha de Ingreso</th>
+                                <td id="fechaingresoModal" class="text-center"></td>
+                            </tr>
+                            <tr>
+                                <th>Fecha de Confirmación</th>
+                                <td id="fechaconfirmacionModal" class="text-center"></td>
+                            </tr>                         
+                        </table>
+
+                        <table class="table table-light table-bordered">
+                            <tr>
+                                <th>Cliente</th>
+                                <td id="clienteModal" class="text-center"></td>
+                            </tr>                
+                            <tr>
+                                <th>Email</th>
+                                <td id="emailModal" class="text-center"></td>
+                            </tr>
+                            <tr>
+                                <th>Producto</th>
+                                <td id="productoModal" class="text-center"></td>
+                            </tr>
+                            <tr>
+                                <th>Medidas</th>
+                                <td id="medidasModal" class="text-center"></td>
+                            </tr>
+                            <tr>
+                                <th>Madera</th>
+                                <td id="maderaModal" class="text-center"></td>
+                            </tr>
+                            <tr>
+                                <th>Color</th>
+                                <td id="colorModal" class="text-center"></td>
+                            </tr>
+                            <tr>
+                                <th>Cantidad</th>
+                                <td id="cantidadModal" class="text-center"></td>
+                            </tr>
+                            <tr>
+                                <th>Detalles de Fabricación</th>
+                                <td style ="word-break:break-all;" id="detallesfabModal" class="text-center"></td>
+                            </tr>
+                            <tr>
+                                <th>Detalles de Pintura</th>
+                                <td style ="word-break:break-all;" id="detallespinModal" class="text-center"></td>
+                            </tr>                            
+                        </table>  
+                    </div>
+
+                    <div class="col-6">
+                        <table class="table table-success table-bordered">                       
+                            <tr>
+                                <th>Fecha de Ingreso Fábrica</th>
+                                <td id="fechaingresofabricaModal" class="text-center"></td>
+                            </tr>
+                            <tr>
+                                <th>Fecha de Término</th>
+                                <td id="fechaterminoModal" class="text-center"></td>
+                            </tr>
+                        </table>
+                        <table id="trabajosModal" class="table table-striped table-bordered text-center">
+                            <thead>
+                                <tr>
+                                    <th>Trabajo</th>
+                                    <th>Maestro</th>
+                                    <th>Orden de Trabajo</th>
+                                </tr>                           
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <table class="table table-striped table-bordered">
+                            
+                            <tr>
+                                <th>Total Costos</th>
+                                <td id="totalcostosModal" class="text-center"></td>
+                            </tr>
+                            <tr>
+                                <th>Utilidad</th>
+                                <td id="utilidadModal" class="text-center"></td>
+                            </tr>
+                            <tr>
+                                <th>Subtotal Neto</th>
+                                <td id="subtotalModal" class="text-center"></td>
+                            </tr>
+                            <tr>
+                                <th>Total Bruto (PvP)</th>
+                                <td id="totalModal" class="text-center"></td>
+                            </tr>
+                            <tr>
+                                <th>Rentabilidad</th>
+                                <td id="rentabilidadModal" class="text-center"></td>
+                            </tr>
+                        </table>  
+                    </div>
+                </div>                
+            </div>
+            <div class="modal-footer">
+                <div class="col">
+                    <a class="btn btn-warning" id="infoModal">Más información</a>
+                    <a class="btn btn-outline-dark" id="baseModal">Usar como Base</a>
+                </div>
+                <div class="col text-nowrap">
+                    <a class="btn btn-primary" id="editardatosModal">Editar Datos</a>
+                    <a class="btn btn-danger" id="presupuestoModal">Cotización</a>
+                    <a class="btn btn-success" id="pdfModal">Presupuesto PDF</a>
+                    <a class="btn btn-secondary" id="reasignarModal">Re-asignar</a>
+                    <a class="btn btn-secondary" id="editarstatusModal">Cambiar Status</a>
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+       
+<!--cargar javascript del archivo pedidos.js-->
+{% load static %}
+<script src="{% static "js/database.js" %}"></script>
+
+<!-- datatables:  -->
+<script type="text/javascript"
+src="https://cdn.datatables.net/v/dt/dt-1.11.3/fh-3.2.1/datatables.min.js"></script>
+
+<!--moment(formato javascript para las fechas)-->
+<script type="text/javascript"
+src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script type="text/javascript"
+src="//cdn.datatables.net/plug-ins/1.10.21/sorting/datetime-moment.js"></script>
+
+
+{% endblock %}

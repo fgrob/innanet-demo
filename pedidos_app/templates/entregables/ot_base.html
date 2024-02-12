@@ -1,0 +1,84 @@
+<!-- Template con el formato OT final -->
+{% load static %}
+{% load filtros %}
+
+<div class="row text-center">
+    <h5>Orden de Trabajo N°{{trabajo.id}}</h5>
+    <p class="fw-bold">{{trabajo.tipo_trabajo}}</p>
+    <br>
+    <br>
+</div>
+
+<div class="row justify-content-between">
+    <div class="col-4">
+        <p><span class="fw-bold">Fecha: </span>&nbsp {{fecha_ot | formato_fecha_sinhora}}</p>
+        <p><span class="fw-bold">Cliente: </span>&nbsp {{trabajo.presupuesto_asociado.pedido.cliente.nombre}} {{trabajo.presupuesto_asociado.pedido.cliente.apellido}}</p>
+    </div>
+    <div class="col-4 text-start">
+        <p><span class="fw-bold">Pedido ID: </span>&nbsp {{trabajo.presupuesto_asociado.pedido.id}}</p>
+        <p><span class="fw-bold">Maestro: </span>&nbsp {{trabajo.maestro_asociado.nombre}} {{trabajo.maestro_asociado.apellido}}</p>
+    </div>
+</div>
+<div class="row">
+    <table class="display table table-bordered text-center align-middle">
+        <thead>
+            <tr class="table-active">
+                <th>Producto</th>
+                <th>Medidas</th>
+                <th>Madera</th>
+                <th>Color</th>
+                <th>Cantidad</th>
+                <th>Materiales</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="text-nowrap">{{trabajo.presupuesto_asociado.pedido.producto}}</td>
+                <td>{{trabajo.presupuesto_asociado.pedido.medidas}}</td>
+                <td>{{trabajo.presupuesto_asociado.pedido.madera}}</td>
+                <td>{{trabajo.presupuesto_asociado.pedido.color}}</td>
+                <td>{{trabajo.presupuesto_asociado.pedido.cantidad}}</td>
+                <td class="text-nowrap">
+                    {% for material in trabajo.presupuesto_asociado.materiales.all %}
+                        {% if material.material_asignado.categoria.categoria != 'Materiales Varios' %}
+                            {{material.material_asignado.categoria.categoria}}: {{material.material_asignado.material}},<span class="fw-bold">{{material.cantidad}} {{material.material_asignado.unidad_medida}}</span><br>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>            
+        </tbody>
+        <tfoot>
+            <tr></tr>
+        </tfoot>
+    </table>
+</div>
+<div class="row">
+    <table class="display table table-bordered text-center align-middle">
+        <thead>
+            <tr class="table-active">
+                <th>{% if trabajo.tipo_trabajo.oficio == 'Pintor' %}
+                    Detalles de Pintura
+                    {% else %}                    
+                    Detalles de Fabricación
+                    {% endif %}
+                </th>
+                <th>Notas adicionales</th>
+            </tr>
+        </thead>
+        <tbody>
+            <td style ="word-break:break-all; max-width: 250px; height: 60px;">                
+                {% if trabajo.tipo_trabajo.oficio == 'Pintor' %}
+                    {{trabajo.presupuesto_asociado.pedido.detalles_pintura}}
+                {% else %}                    
+                    {{trabajo.presupuesto_asociado.pedido.detalles_fabricacion}}
+                {% endif %}
+            </td>
+            <td style ="word-break:break-all; max-width: 250px;">{{trabajo.notas_trabajo}}</td>
+        </tbody>
+        <tfoot>
+            <tr></tr>
+        </tfoot>
+    </table>
+</div>
+
+

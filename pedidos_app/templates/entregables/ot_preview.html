@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Opciones PDF {% endblock %}
+{% block navtitulo %}Materiales{% endblock %}
+{% block container %}
+
+{% load filtros %}
+
+<div class="row">
+    <div class="col text-center">
+        <br>
+        <button class="btn btn-dark" onclick="history.back()">Volver</button>
+        <a href="/ordentrabajo" target="_blank" class="btn btn-success">Generar OT</a>
+    </div>
+</div>
+<div class="text-center">
+    <p class="fst-italic mt-3">Al generar la OT por primera vez se fijará la fecha de asignación de manera permanente</p>
+    <hr>
+</div>
+
+{% include 'entregables/ot_base.html' %}
+
+{% endblock %}

@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block title %} Lista de Pedidos {% endblock %}
+
+{% block head %}
+<!-- Datatables  -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.3/fh-3.2.1/datatables.min.css" />
+{% endblock %}
+
+{% block navtitulo %}Lista de Pedidos{% endblock %}
+
+{% block container %}
+
+{% load filtros %}
+<div class="row justify-content-end">
+    <div class="col-3 selectors">
+    </div>
+    <hr>
+</div>
+<br>
+<table id="tabla-pedidos" class="display table table-bordered table-striped text-center align-middle" width="100%">
+    <thead>
+        <tr class="align-middle">
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Fecha Ingreso</th>
+            <th style="display:none;">Fecha Ingreso*</th> <!--columna auxiliar para el sorting de la tabla-->
+            <th>Fecha Envío PDF</th>
+            <th style="display:none;">Fecha Envío PDF*</th> <!--columna auxiliar para el sorting de la tabla-->
+            <th>Fecha Confirmación</th>
+            <th style="display:none;">Fecha Confirmación*</th> <!--columna auxiliar para el sorting de la tabla-->
+            <th>Status</th>
+            <th>PDF</th>           
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>              
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="dashModal" tabindex="-1" aria-labelledby="dashModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title col-11" id="dashModalLabel"></h5>
+                <button type="button" class="btn-close col-1" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body row pb-0">
+                <div class="col">
+                    <table class="table table-success table-bordered align-middle">
+                        <tr>
+                            <th class="text-center">Producto</th>
+                            <td id="productoModal" class="text-left"></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Medidas</th>
+                            <td id="medidasModal" class="text-left"></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Madera</th>
+                            <td id="maderaModal" class="text-left"></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Color</th>
+                            <td id="colorModal" class="text-left"></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Cantidad</th>
+                            <td id="cantidadModal" class="text-left"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col">
+                    <table class="table table-light table-bordered align-middle">
+                        <tr>
+                            <th class="text-center">Cliente</th>
+                            <td id="clienteModal" class="text-left"></td>
+                        </tr>                
+                        <tr>
+                            <th class="text-center">Email</th>
+                            <td id="emailModal" class="text-left"></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Celular</th>
+                            <td id="celularModal" class="text-left"></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Fecha de Ingreso</th>
+                            <td id="fechaingresoModal" class="text-left"></td>
+                        </tr>                
+                        <tr>
+                            <th class="text-center text-nowrap">Fecha Confirmación</th>
+                            <td id="fechaconfirmacionModal" class="text-left"></td>
+                        </tr>
+                        
+                    </table>
+                </div>               
+                
+            </div>
+            <div class="modal-body row pt-0">
+                <div class="col">
+                    <table class="table table-success table-bordered align-middle">
+                        <tr>
+                            <th class="text-center bg-dark bg-gradient text-white">Detalles de fabricación</th>
+                            <th colspan="2" class="text-center bg-dark bg-gradient text-white">Detalles de pintura</th>
+                        </tr>
+                        <tr>
+                            <td rowspan="4" style ="word-break:break-all;" id="detallesfabModal" class="text-center table-info"></td>
+                            <td colspan="2" width="50%" style ="word-break:break-all" id="detallespinModal" class="text-center table-info"></td>                            
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-body row pt-0">                
+            </div>
+            <div class="modal-footer justify-content-between">
+                <div class="col">
+                    <a class="btn btn-warning" id="infoModal">Más información</a>
+                    <a class="btn btn-link" id="anularModal">Anular</a>
+                </div>
+                <div class="col text-nowrap">
+                    <a class="btn btn-danger" id="presupuestoModal">Cotizar</a>
+                    <a class="btn btn-success" id="confirmacionModal">Confirmar</a>
+                    <a class="btn btn-secondary" id="asignacionModal">Enviar a producción</a>
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+       
+<!--cargar javascript del archivo pedidos.js-->
+{% load static %}
+<script src="{% static "js/pedidos.js" %}"></script>
+
+<!-- datatables:  -->
+<script type="text/javascript"
+src="https://cdn.datatables.net/v/dt/dt-1.11.3/fh-3.2.1/datatables.min.js"></script>
+
+<!--moment(formato javascript para las fechas)-->
+<script type="text/javascript"
+src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script type="text/javascript"
+src="//cdn.datatables.net/plug-ins/1.10.21/sorting/datetime-moment.js"></script>
+
+{% endblock %}

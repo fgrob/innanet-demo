@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% block title %}Materiales {% endblock %}
+{% block head %}
+<!-- Datatables  -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.3/fh-3.2.1/datatables.min.css" />
+{% endblock %}
+{% block navtitulo %}Materiales{% endblock %}
+{% block container %}
+
+{% load filtros %}
+
+<br>
+<div class="row">
+    <p class="fw-light fst-italic">Ingresar nuevo material</p>
+</div>
+<div class="row">
+    <form action="/materiales/crear" method="post" class="row">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col">
+                <label for="categoria" class="fw-bold">Categoría</label>
+                <select name="categoria" id="categoria" class="form-select" aria-label="Default select example">
+                        <option value="0">Seleccionar</option>
+                        {% for categoria in categorias %}
+                            <option value="{{categoria.id}}">{{categoria.categoria}}</option>
+                        {% endfor %}                                        
+                </select> 
+            </div>
+            <div class="col">
+                <label for="material" class="fw-bold">Material</label>
+                <input name="material" required type="text" class="form-control" id="material" maxlength="50">
+            </div>
+            <div class="col">
+                <label for="costo" class="fw-bold">Costo Neto</label>
+                <input name="costo" required type="number" class="form-control" id="costo">
+            </div>
+            <div class="col">
+                <label for="unidad" class="fw-bold">Unidad de medida</label>
+                <input name="unidad" required type="text" class="form-control" id="unidad" maxlength="50">            
+            </div>                                                                           
+        </div>
+        <div class="row">
+            <div class="col text-start">
+                &nbsp<a href="#ingresarcategoriaModal" data-bs-toggle="modal" data-bs-target="#ingresarcategoriaModal">nueva categoría</a>
+
+            </div>
+            <div class="col text-center">
+                <br>
+                <button type="submit" class="btn btn-success">Añadir Material</button>                                                 
+            </div>
+            <div class="col"></div>
+        </div> 
+    </form>
+</div>
+<div class="col">
+    <table id="tabla-materiales" class="display table table-bordered table-striped text-center align-middle" width="100%">
+        <thead>
+            <tr>
+                <th>PK MAT</th>
+                <th style="display:none">PK CAT</th>
+                <th>Categoría</th>
+                <th>Material</th>
+                <th>Costo Neto</th>
+                <th>Unidad de medida</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>              
+    </table>
+</div>
+
+<!-- Modal edición de material -->
+<div class="modal fade" id="edicionModal" tabindex="-1" aria-labelledby="edicionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/materiales/editar" method="post" class="row">
+                {% csrf_token %}                                                                        
+                <div class="modal-header text-center">
+                    <h5 class="modal-title col-11" id="clientesModalLabel">Editar Material</h5>
+                    <button type="button" class="btn-close col-1" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">                
+                    <table class="table table-striped table-bordered">
+                        <tr style="display:none">
+                            <th>PK</th>
+                            <td><input id="pkModal" name="pkModal" class="form-control" value="" style="width:100%"></td>
+                        </tr>
+                        <tr>
+                            <th>Categoría</th>
+                            <td>
+                                <select name="categoriaModal" id="categoriaModal" class="form-select" aria-label="Default select example">
+                                    {% for categoria in categorias %}
+                                        <option value="{{categoria.id}}">{{categoria.categoria}}</option>
+                                    {% endfor %}                                        
+                            </select> 
+                            </td>
+                        </tr>                
+                        <tr>
+                            <th>Material</th>
+                            <td><input id="materialModal" name="materialModal" required type="text" class="form-control" value="" style="width:100%"></td>
+                        </tr>
+                        <tr>
+                            <th>Costo Neto</th>
+                            <td><input id="costoModal" name="costoModal" required type="number" class="form-control" value="" style="width:100%"></td>
+                        </tr>
+                        <tr>
+                            <th>Unidad de medida</th>
+                            <td><input id="unidadModal" name="unidadModal" required type="text" class="form-control" value="" style="width:100%"></td>
+                        </tr>                   
+                    </table>
+                    <p class="fst-italic">La categoría, el nombre y la unidad de medida se modificarán en los presupuestos anteriores.<span class="fw-bold"> Actualizar el costo del material solo se verá reflejado en los nuevos presupuestos</span></p>  
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Guardar</button>                                                 
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal ingresar nueva categoria -->
+<div class="modal fade" id="ingresarcategoriaModal" tabindex="-1" aria-labelledby="ingresarcategoriaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/categoria/ingresar" method="post" class="row">
+                {% csrf_token %}                                                                        
+                <div class="modal-header text-center">
+                    <h5 class="modal-title col-11">Ingresar categoría</h5>
+                    <button type="button" class="btn-close col-1" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">                
+                    <table class="table table-striped table-bordered">             
+                        <tr>
+                            <th>Categoría</th>
+                            <td><input id="nuevacategoriaModal" name="nuevacategoriaModal" required type="text" class="form-control" value="" style="width:100%" maxlength="50"></td>
+                        </tr>                 
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Guardar</button>                                                 
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--cargar javascript del archivo pedidos.js-->
+{% load static %}
+<script src="{% static "js/materiales.js" %}"></script>
+
+<!-- datatables:  -->
+<script type="text/javascript"
+src="https://cdn.datatables.net/v/dt/dt-1.11.3/fh-3.2.1/datatables.min.js"></script>
+
+{% endblock %}

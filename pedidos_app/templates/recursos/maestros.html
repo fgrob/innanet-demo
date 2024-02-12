@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block title %}Materiales {% endblock %}
+{% block navtitulo %}Materiales{% endblock %}
+{% block container %}
+
+{% load filtros %}
+
+<br>
+<form action="/maestros/ingresar" method="post" class="row mb-3 justify-content-start">
+    {% csrf_token %}
+    <div class="col-2">
+        <label for="nombre" class="fw-bold">Nombre</label>
+        <input name="nombre" required type="text" class="form-control" id="nombre" maxlength="50">
+    </div>
+    <div class="col-2">
+        <label for="apellido" class="fw-bold">Apellido</label>
+        <input name="apellido" required type="text" class="form-control" id="apellido" maxlength="50">
+    </div>
+    <div class="col-2">
+        <br>
+        <button type="submit" class="btn btn-success">Agregar Maestro</button>                                                  
+    </div> 
+</form>
+<div class="row"> 
+    <div class="col">
+        <table class="table table-striped table-bordered text-center">
+            <thead>
+                <th>PK</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+            </thead>
+            <tbody>
+                {% for maestro in maestros %}
+                <tr>
+                    <td>{{maestro.id}}</td>
+                    <td>{{maestro.nombre}}</td>
+                    <td>{{maestro.apellido}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>            
+        </table>
+    </div>
+    <div class="col">
+        <table class="table table-striped table-bordered text-center">
+            <thead>
+                <th>PK</th>
+                <th>Tipo Trabajo</th>
+                <th>Total Diario</th>
+                <th>Editar</th>
+            </thead>
+            <tbody>
+                {% for tipotrabajo in trabajos %}
+                <tr>
+                    <td id="id_{{tipotrabajo.id}}">{{tipotrabajo.id}}</td>
+                    <td id="tipo_{{tipotrabajo.id}}">{{tipotrabajo.oficio}}</td>
+                    <td id="total_{{tipotrabajo.id}}">{{tipotrabajo.total_diario | formato_peso}}</td>
+                    <td>
+                        <i href="#editarModal" title="Editar valor" data-bs-toggle="modal" data-bs-target="#editarModal" class="editar btn fa-solid fa-pen-to-square" data-id={{tipotrabajo.id}}></i>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>    
+</div>
+
+<!-- Modal edición de tipo de trabajo -->
+<div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/maestros/lista/modificar" method="post" class="row">
+                {% csrf_token %}                                                                        
+                <div class="modal-header text-center">
+                    <h5 class="modal-title col-11" id="editarModalLabel">Editar</h5>
+                    <button type="button" class="btn-close col-1" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">                
+                    <table class="table table-warning table-bordered text-center align-middle">
+                        <tr style="display:none">
+                            <th>PK</th>
+                            <td><input id="pkModal" name="pkModal" class="form-control" value="" style="width:100%"></td>
+                        </tr>              
+                        <tr>
+                            <th>Total por día
+                                <br>
+                                <span style="text-decoration:none; font-size: 13px;" class="fst-light">sin imposiciones</span>
+                            </th>
+                            <td><input id="totalModal" name="totalModal" required type="number" class="form-control" value="" style="width:100%"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Guardar</button>                                                 
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--cargar javascript-->
+{% load static %}
+<script src="{% static "js/maestros.js" %}"></script>
+
+{% endblock %}

@@ -1,0 +1,370 @@
+{% extends 'base.html' %}
+
+{% block title %} Lista de Pedidos {% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block navtitulo %}Detalles Pedido ID {{pedido.id}} {% endblock %}
+
+{% block container %}
+
+{% load filtros %}
+
+<div class="row">
+
+    <div class="col text-center mt-2">
+        <h2>
+            {% if pedido.status == "0" %} <!-- Pendiente -->
+                <span class="text-nowrap bg-danger bg-gradient text-white"><a href="/pedidos" class="text-decoration-none text-white">{{pedido.get_status_display}}</a></span>
+            {% elif pedido.status == "1" %} <!-- En Revisión -->
+                <span class="text-nowrap bg-warning bg-gradient"><a href="/pedidos" class="text-decoration-none text-dark">{{pedido.get_status_display}}</a></span>
+            {% elif pedido.status == "2" %} <!-- No confirmado -->
+                <span class="text-nowrap bg-light bg-gradient"><a href="/pedidos" class="text-decoration-none text-dark">{{pedido.get_status_display}}</a></span>
+            {% elif pedido.status == "3" %}  <!-- Confirmado -->
+                <span class="text-nowrap bg-info bg-gradient"><a href="/pedidos" class="text-decoration-none text-dark">{{pedido.get_status_display}}</a></span>
+            {% elif pedido.status == "4" %}  <!-- En fabricación -->
+                <span class="text-nowrap bg-primary bg-gradient"><a href="/produccion" class="text-decoration-none text-white">{{pedido.get_status_display}}</a></span>
+            {% elif pedido.status == "5" %}  <!-- Terminado -->
+                <span class="text-nowrap bg-success bg-gradient text-white">{{pedido.get_status_display}}</span>
+            {% elif pedido.status == "6" %}  <!-- Anulado -->
+                <span class="text-nowrap bg-dark bg-gradient text-white">{{pedido.get_status_display}}</span>    
+            {% endif %}
+        </h2>
+    </div>
+    <hr>
+</div>
+
+<div class="row text-center">
+    <h5>Información de Pedido</h5>
+</div>
+<div class="row">
+    <div class="col">
+        <table class="table table-striped table-bordered mb-0">
+            <tr>
+                <th>Cliente</th>
+                <td>{{pedido.cliente}} {% if pedido.reserva_tienda == 1 %} (Tienda) {% endif %}</td>
+            </tr>
+            
+            <tr>
+                <th>Email</th>
+                <td>{{pedido.cliente.email}}</td>
+            </tr>
+
+            <tr>
+                <th>Celular</th>
+                <td>{{pedido.celular}}</td>
+            </tr>
+    
+            <tr>
+                <th>Producto</th>
+                <td>{{pedido.producto}}</td>
+            </tr>
+            
+            <tr>
+                <th>Medidas</th>
+                <td>{{pedido.medidas}}</td>
+            </tr>
+            
+            <tr>
+                <th>Madera</th>
+                <td>{{pedido.madera}}</td>
+            </tr>
+            
+            <tr>
+                <th>Color</th>
+                <td>{{pedido.color}}</td>
+            </tr>
+
+            <tr>
+                <th>Cantidad</th>
+                <td>{{pedido.cantidad}}</td>
+            </tr>
+            
+            <tr>
+                <th>Detalles de Fabricación</th>
+                <td style ="word-break:break-all;">{{pedido.detalles_fabricacion}}</td>
+            </tr>
+    
+            <tr>
+                <th>Detalles de Pintura</th>
+                <td style ="word-break:break-all;">{{pedido.detalles_pintura}}</td>
+            </tr>
+               
+        </table>
+        <span style="font-size:12px" class="fw-light fst-italic">Update: {{pedido.updated_at | formato_fecha_basico}}</span>                        
+    </div>
+
+    <div class="col">
+        <table class="table table-striped table-bordered">
+            <tr>
+                <th>Fecha Ingreso</th>
+                <td>{{pedido.fecha_creacion}}</td>
+            </tr>
+            
+            <tr>
+                <th>Fecha Envío PDF</th>
+                {% if pedido.fecha_pdf !=  None %}
+                    <td>{{pedido.fecha_pdf}}</td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+            </tr>
+    
+            <tr>
+                <th>Fecha Confirmación</th>
+                {% if pedido.fecha_confirmacion != None %}
+                    <td>{{pedido.fecha_confirmacion}}</td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+            </tr>
+    
+            <tr>
+                <th>Fecha Ingreso Fábrica</th>
+                {% if pedido.fecha_ingreso_fabrica != None %}
+                    <td>{{pedido.fecha_ingreso_fabrica}}</td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+            </tr>
+    
+            <tr>
+                <th>Fecha Término</th>
+                {% if pedido.fecha_termino != None %}
+                    <td>{{pedido.fecha_termino}}</td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+            </tr> 
+            
+            <tr>
+                <th>Fecha Cierre</th>
+                {% if pedido.fecha_cierre != None %}
+                    <td>{{pedido.fecha_cierre}}</td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+            </tr> 
+        </table>
+
+        <br>
+        <h5 class="text-center">Notas del Presupuesto</h5>
+        <p class="border h-30 text-break">{{pedido.presupuesto.notas_presupuesto}}</p>
+               
+    </div>        
+</div>
+
+<div class="row text-center">
+    <h5>Trabajos</h5>
+</div>
+
+<div class="row">
+    <div clas="col">
+        <span style="font-size:12px" class="fw-light fst-italic">PK Presupuesto: {{pedido.presupuesto.id}} Update: {{pedido.presupuesto.updated_at | formato_fecha_basico}}</span>
+        <table class="table table-striped table-bordered text-center align-middle">
+            <thead>
+                <tr>
+                    <th>OT N°</th>
+                    <th>Status Trabajo</th>
+                    <th>Trabajo</th>
+                    <th class="text-nowrap">Costo Diario</th>
+                    <th>Imposiciones</th>
+                    <th>Días</th>
+                    <th class="text-nowrap">Total s/IMP</th>
+                    <th class="text-nowrap">Total c/IMP</th>
+                    <th class="mw-20">Notas Trabajo</th>
+                    <th>Status de Pago</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trabajo in pedido.presupuesto.trabajos.all|dictsort:"id" %}
+                    <tr>
+                        <td>
+                            {{trabajo.id}}
+                            <br>
+                            <span style="font-size:12px" class="fw-light fst-italic">Update: {{trabajo.updated_at | formato_fecha_basico}}</span>
+                        </td>
+                        <td {% if trabajo.status_trabajo == "0" %} class="bg-danger bg-gradient text-white" {% else %} class="bg-success bg-gradient text-white" {% endif %}>
+                            {{trabajo.get_status_trabajo_display}}
+                            {% if trabajo.fecha_termino_trabajo != None %}
+                                <br>
+                                <span class="fs-7 fw-light" class="fw-light fst-italic">{{trabajo.fecha_termino_trabajo | formato_fecha_basico }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-nowrap">
+                            <span class="fst-italic">{{trabajo.tipo_trabajo}}</span>
+                            <hr class="m-0 pb-1 text-dark">
+                            {{trabajo.maestro_asociado.nombre}} {{trabajo.maestro_asociado.apellido}}
+                            <br>
+                            <span style="font-size:12px" class="fw-light fst-italic">Asignación: {{trabajo.fecha_asignacion | formato_fecha_basico}}</span>
+                        </td>
+                        <td>{{trabajo.costo_trabajo | formato_peso}}</td>
+                        <td>{{trabajo.imposiciones | formato_peso}}</td>
+                        <td>{{trabajo.dias_trabajo}}</td>
+                        <td>{{trabajo.total_simp | formato_peso}}</td>
+                        <td>{{trabajo.total_trabajo | formato_peso}}</td>
+                        <td class="text-break">{{trabajo.notas_trabajo}}</td>
+                        <td {% if trabajo.status_pago == "0" %} class="bg-danger bg-gradient text-white" {% else %} class="bg-success bg-gradient text-white" {% endif %}>
+                            {{trabajo.get_status_pago_display}}
+                            {% if trabajo.fecha_pago != None %}
+                                <br>
+                                <span class="fs-7 fw-light">{{trabajo.fecha_pago | formato_fecha_basico }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5"></td>
+                    <td class="fw-bold">Total:</td>
+                    <td class="fw-bold">{{totales.total_trabajos_simp | formato_peso}}</td>
+                    <td class="fw-bold">{{totales.total_trabajos | formato_peso}}</td>
+                    <td colspan="2"></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<div class="row text-center">
+    <h5>Materiales</h5>
+</div>
+
+<div class="row">
+    <div class="col">
+        <table class="table table-striped table-bordered text-center align-middle">
+            <thead>
+                <tr>
+                    <th>PK Material</th>
+                    <th>Categoria</th>
+                    <th>Material</th>
+                    <th>Costo</th>
+                    <th>Cantidad</th>
+                    <th>Unidad</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for material in pedido.presupuesto.materiales.all %}
+                    <tr>
+                        <td>
+                            {{material.id}}
+                            <br>
+                            <span style="font-size:12px" class="fw-light fst-italic">Update: {{material.updated_at | formato_fecha_basico}}</span>
+                        </td>
+                        <td>{{material.material_asignado.categoria.categoria}}</td>
+                        <td>{{material.material_asignado.material}}</td>                  
+                        <td>{{material.costo_material | formato_peso}}</td>
+                        <td>{{material.cantidad}}</td>
+                        <td>{{material.material_asignado.unidad_medida}}</td>
+                        <td>{{material.total_material | formato_peso}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6"></td>
+                    <td class="fw-bold">{{totales.total_materiales | formato_peso}}</td>
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-5">
+        <h5 class="text-center">Resumen</h5>
+        <table class="table table-striped table-bordered text-center align-middle">
+            <tr>
+                <th></th>
+                <th>Unitario</th>
+                <th {% if pedido.cantidad < 2 %} style="display:none" {% endif %}>Total</th>
+            </tr>
+            <tr>
+                <th>Cantidad</th>
+                <td>1</td>
+                <td {% if pedido.cantidad < 2 %} style="display:none" {% endif %}>{{pedido.cantidad}}</td>
+            </tr>
+            <tr>
+                <th>Costos Directos
+                    <br>
+                    <span style="font-size:14px" class="fw-light fst-italic">(Mano de obra + Materiales)</span>
+                </th>
+                <td>{{totales.costos_directos_unit | formato_peso}}</td>
+                <td {% if pedido.cantidad < 2 %} style="display:none" {% endif %}>{{totales.costos_directos_total | formato_peso}}</td>
+            </tr>
+            <tr>
+                <th>
+                    Gastos Generales
+                    <br>
+                    <span style="font-size:14px" class="fw-light fst-italic">{{totales.porcentaje_gastos_generales | formato_porcentaje}} de Costos Directos</span>
+
+                </th>
+                <td>{{totales.gastos_generales_unit | formato_peso}}</td>
+                <td {% if pedido.cantidad < 2 %} style="display:none" {% endif %}>{{totales.gastos_generales_total | formato_peso}}</td>
+            </tr>
+            <tr>
+                <th>Otros gastos</th>
+                <td>{{totales.otros_gastos_unit | formato_peso}}</td>
+                <td {% if pedido.cantidad < 2 %} style="display:none" {% endif %}>{{totales.otros_gastos_total | formato_peso}}</td>
+            </tr>
+            <tr>
+                <th>Total Costos</th>
+                <td>{{totales.total_costos_unit | formato_peso}}</td>
+                <td {% if pedido.cantidad < 2 %} style="display:none" {% endif %}>{{totales.total_costos | formato_peso}}</td>
+            </tr>   
+            <tr>
+                <th>Utilidad</th>
+                <td>{{totales.porcentaje_utilidad | formato_porcentaje}}</td>
+                <td {% if pedido.cantidad < 2 %} style="display:none" {% endif %}>{{totales.porcentaje_utilidad | formato_porcentaje}}</td>
+            </tr>    
+            <tr>
+                <th>
+                    Subtotal Neto
+                    <br>
+                    <span style="font-size:14px" class="fw-light fst-italic">Costos + Utilidad</span>                 
+                </th>
+                <td>{{totales.subtotal_unit | formato_peso}}</td>
+                <td {% if pedido.cantidad < 2 %} style="display:none" {% endif %}>{{totales.subtotal | formato_peso}}</td>
+            </tr>    
+            <tr>
+                <th>IVA</th>
+                <td>{{totales.iva_unit | formato_peso}}</td>
+                <td {% if pedido.cantidad < 2 %} style="display:none" {% endif %}>{{totales.iva | formato_peso}}</td>
+            </tr>
+            <tr>
+                <th>
+                    Total Bruto
+                    <br>
+                    <span style="font-size:14px" class="fw-light fst-italic">Precio de Venta (PvP)</span> 
+                </th>
+                <td>{{totales.total_unit | formato_peso}}</td>
+                <td {% if pedido.cantidad < 2 %} style="display:none" {% endif %}>{{totales.total | formato_peso}}</td>
+            </tr>
+        
+            <tr>
+                <th>Rentabilidad Neta</th>
+                <td>{{totales.rentabilidad_unit | formato_peso}}</td>
+                <td {% if pedido.cantidad < 2 %} style="display:none" {% endif %}>{{totales.rentabilidad | formato_peso}}</td>
+            </tr>
+        </table>
+    </div>    
+</div>
+
+
+<div class="row justify-content-center">
+    <div class="col-2">
+        <br>
+        <a class="btn btn-dark" style="width:100%" onclick="history.back()">Volver</a>
+    </div>
+</div>
+<br>
+
+{% endblock %}
+
+
+            

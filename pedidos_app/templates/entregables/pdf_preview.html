@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Opciones PDF {% endblock %}
+{% block navtitulo %}PDF Preview {% endblock %}
+{% block container %}
+{% load filtros %}
+
+<div class="row">
+  <div class="col text-center">
+    <br />
+    <button class="btn btn-dark" onclick="history.back()">Volver</button>
+    <a
+      href="/clientes/{{pedidos.0.pedido.cliente.id}}/pdf/lista"
+      class="btn btn-secondary"
+      >Añadir más presupuestos</a
+    >
+    <a href="/pdf" target="_blank" class="btn btn-success">Generar PDF</a>
+  </div>
+</div>
+<div class="text-center">
+  <p class="fst-italic mt-3">
+    Al generar el PDF por primera vez se fijará la fecha de manera permanente
+  </p>
+  <hr />
+</div>
+
+{% include 'entregables/pdf_base.html' %}
+
+{% endblock %}

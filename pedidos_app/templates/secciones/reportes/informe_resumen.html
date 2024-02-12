@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+{% block title %}Informe Resumen{% endblock %}
+{% block head %}
+<!-- Datatables  -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.3/fh-3.2.1/datatables.min.css" />
+
+{% endblock %}
+{% block navtitulo %}Informe Resumen{% endblock %}
+{% block container %}
+
+{% load filtros %}
+{% load tags %}
+
+<br>
+<form action="/reportes/informeresumen" method="post">
+    {% csrf_token %}
+    <label for="start">Fecha:</label>
+    <input type="month" id="fecha" name="fecha"
+           min="2020-01" value="{{fecha}}">
+    <button type="submit" class="btn btn-sm btn-dark">Ver info</button>                                                  
+</form>
+<hr>
+
+<div class="row text-center">
+    <h2>{{fecha_actual}}</h2>
+    <div class="col">
+        <h3>Ventas netas: <span class="text-success">{{confirmados_neto.total | formato_peso}}</span></h3>        
+        <h5>Rentabilidad: <span class="text-primary">{{confirmados_rentabilidad.total | formato_peso}}</span></h5>        
+        <h5>Pedidos confirmados: <span class="text-danger">{{cantidad_confirmados_mes}}</span></h5>        
+    </div>
+    <div class="col">
+        <h3>Abonos: <span class="text-warning">{{total_abonos | formato_peso}}</span></h3>        
+        <h5>Rentabilidad: <span class="text-primary">{{total_abonos_rentabilidad | formato_peso}}</span></h5>        
+    </div>
+    <hr>
+    <br>
+    <h4>Historial de ventas y rentabilidad</h4>
+    <p class="fw-light">Se consideran venta los pedidos confirmados</p>
+    <table class="table table-bordered align-middle">
+        <thead>
+            <th></th>
+            <th>Enero</th>
+            <th>Febrero</th>
+            <th>Marzo</th>
+            <th>Abril</th>
+            <th>Mayo</th>
+            <th>Junio</th>
+            <th>Julio</th>
+            <th>Agosto</th>
+            <th>Septiembre</th>
+            <th>Octubre</th>
+            <th>Noviembre</th>
+            <th>Diciembre</th>
+        </thead>
+        <tbody>
+            <tr>
+                {% for mes in historial_ventas %}
+                    {% if mes.month == 1 %}
+                        <td class="fw-bold">{{mes.year}}</td>
+                    {% endif %}
+                    <td>
+                        <span class="text-success fw-bold" style="font-size:14px">{{mes.total | formato_peso}}</span> 
+                        <br>
+                        <span class="text-primary" style="font-size:14px">{{mes.rentabilidad | formato_peso}}</span>
+                        <br>
+                        <span class="text-danger" style="font-size:14px">{{mes.cantidad}}</span>
+                    </td>
+                    {% if mes.month == 12 %}
+                        </tr>
+                        <tr>
+                   {% endif %}
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <h4>Historial de abonos y rentabilidad</h4>
+    <p class="fw-light">Los abonos consideran el 50% de los pedidos confirmados y el 50% de los pedidos terminados (cerrados)</p>
+    <table class="table table-bordered align-middle">
+        <thead>
+            <th></th>
+            <th>Enero</th>
+            <th>Febrero</th>
+            <th>Marzo</th>
+            <th>Abril</th>
+            <th>Mayo</th>
+            <th>Junio</th>
+            <th>Julio</th>
+            <th>Agosto</th>
+            <th>Septiembre</th>
+            <th>Octubre</th>
+            <th>Noviembre</th>
+            <th>Diciembre</th>
+        </thead>
+        <tbody>
+            <tr>
+                {% for mes in historial_abonos %}
+                    {% if mes.month == 1 %}
+                        <td class="fw-bold">{{mes.year}}</td>
+                    {% endif %}
+                    <td>
+                        <span class="text-warning fw-bold" style="font-size:14px">{{mes.total | formato_peso}}</span> 
+                        <br>
+                        <span class="text-primary" style="font-size:14px">{{mes.rentabilidad | formato_peso}}</span>
+                    </td>
+                    {% if mes.month == 12 %}
+                        </tr>
+                        <tr>
+                   {% endif %}
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+</div>
+<hr>
+<br>
+<div class="row">
+    <h4 class="text-center">Información sobre pedidos</h4>
+    <div class="col text-center">
+        <br>
+        <h5 class="bg-primary text-white">Estado de pedidos a la fecha</h5>
+        <p class="fst-italic">A la fecha, ¿cuántos pedidos hay pendientes? ¿Cuántos en revisión? .. etc</p>
+        <table class="table text-center">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Pendientes</td>
+                    <td>{{cantidad_pendientes}}</td>
+                </tr>
+                <tr>
+                    <td>En revisión</td>
+                    <td>{{cantidad_revision}}</td>
+                </tr>
+                <tr>
+                    <td>No confirmados</td>
+                    <td>{{cantidad_no_confirmados}}</td>
+                </tr>
+                <tr>
+                    <td>Confirmados</td>
+                    <td>{{cantidad_confirmados}}</td>
+                </tr>
+                <tr>
+                    <td>En fabricación</td>
+                    <td>{{cantidad_fabrica}}</td>
+                </tr>
+                <tr>
+                    <td>Pendientes de cierre</td>
+                    <td>{{cantidad_sin_cierre}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col text-center">
+        <br>
+        <h5 class="bg-info">Información General del mes</h5>
+        <p class="fst-italic">¿Cuántos pedidos fueron ingresados este mes? Cuántos confirmados? .. etc</p>
+        <table class="table text-center">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Pedidos ingresados</td>
+                    <td>{{cantidad_ingresados_mes}}</td>
+                </tr>
+                <tr>
+                    <td>Pedidos confirmados</td>
+                    <td>{{cantidad_confirmados_mes}}</td>
+                </tr>
+                <tr>
+                    <td>Pedidos ingresados a fábrica</td>
+                    <td>{{cantidad_ingresados_fabrica_mes}}</td>
+                </tr>
+                <tr>
+                    <td>Pedidos terminados</td>
+                    <td>{{cantidad_terminados_mes}}</td>
+                </tr>
+                <tr>
+                    <td>Pedidos cerrados</td>
+                    <td>{{cantidad_cerrados_mes}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>    
+</div>
+<hr>
+<br>
+<div class="row">
+    <h4 class="text-center">Información sobre trabajos</h4>
+    <div class="col">
+        <br>
+        <table class="table table-light table-bordered table-striped text-center align-middle">
+            <thead>
+                <tr class="align-middle">
+                    <th>Maestro</th>
+                    <th colspan="2" class="bg-warning">Asignados en {{fecha_actual}} <br><span class="fw-light fst-italic">Cantidad / Total</span></th>
+                    <th colspan="2" class="bg-danger text-white">Pendientes acumulados a la fecha<br><span class="fw-light fst-italic">Cantidad / Total</span></th>
+                    <th colspan="2" class="bg-success text-white">Terminados en {{fecha_actual}} <br><span class="fw-light fst-italic">Cantidad / Total</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trabajo in trabajos %}
+                <tr>
+                    <td>{{trabajo.maestro_asociado}}</td>
+
+                    <td>{{trabajo.cantidad_asignados}}</td>
+                    <td>{{trabajo.total_asignados | formato_peso}}</td>
+
+                    <td>{{trabajo.cantidad_pendientes}}</td>
+                    <td>{{trabajo.total_pendientes | formato_peso}}</td>
+
+                    <td>{{trabajo.cantidad_terminados}}</td>
+                    <td>{{trabajo.total_terminados | formato_peso}}</td>
+
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+{% load static %}
+<!--carga el archivo javascript-->
+
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %} Cambiar Status de Pedido {% endblock %}
+
+{% block head %} {% endblock %}
+
+{% block navtitulo %}Editar Status{% endblock %}
+
+{% block container %}
+
+{% load filtros %}
+<br>
+<form action="/pedido/{{pedido.id}}/status/1" method="post" class="row">
+{% csrf_token %}
+<div class="row">
+    <div class="col">
+        <table class="table table-striped table-bordered text-center align-middle">
+            <thead>
+                <tr>
+                    <th>Pedido ID</th>
+                    <th>Status</th>
+                    <th>Cliente</th>
+                    <th>Producto</th>
+                    <th>Maestros</th>
+                    <th>Fechas</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{pedido.id}}</td>
+                    <td>
+                        <select name="status" id="status" class="form-select text-center" aria-label="Default select example">
+                            {% if pedido.status == '6' %}
+                                <option value="1">En revisión</option>
+                                <option value="6" selected="selected">Anulado</option>
+                            {% else %}                            
+                                {% for status in pedido.STATUS_PEDIDO %}
+                                <option value="{{status.0}}" {% if pedido.status == status.0 %} selected="selected" {% endif %}>{{status.1}}</option>
+                                {% endfor %}
+                            {% endif %}
+                        </select>                    
+                    </td>
+                    <td>{{pedido.cliente}}</td>
+                    <td>
+                        {{pedido.producto}}
+                        <br>
+                        {{pedido.medidas}}
+                        <br>
+                        {{pedido.color}}
+                    </td> 
+                    <td>
+                        {% for maestro in pedido.presupuesto.trabajos.all %}
+                            <span class="fw-bold">{{maestro.tipo_trabajo.oficio}}:</span> {{maestro.maestro_asociado.nombre}} {{maestro.maestro_asociado.apellido}}
+                            <br>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <span class="fw-bold">Ingreso:</span> {{pedido.fecha_creacion | formato_fecha_basico_2}} <br>
+                        <span class="fw-bold">Confirmación:</span> {{pedido.fecha_confirmacion | formato_fecha_basico_2}} <br>
+                        <span class="fw-bold">Término:</span> {{pedido.fecha_termino | formato_fecha_basico_2}}
+                    </td>
+                </tr>
+            </tbody>       
+        </table>                         
+
+    </div>
+</div>
+<div class="row">
+    <p class="fw-light">Solo es posible 'bajar' el status de un pedido. Para pasar a un status superior, tienes que seguir el flujo normal del programa.</p>
+</div>
+<div class="row" id="warnings">
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-1 text-center">
+        <a class="btn btn-dark" style="width:100%" onclick="history.back()">Volver</a>
+    </div>
+    <div class="col-1 text-center">
+        <button type="submit" class="btn btn-success text-nowrap">Guardar</button>
+        <br>
+        <br>
+    </div>
+</div>               
+</form>
+
+<!--cargar javascript del archivo status.js-->
+{% load static %}
+<script src="{% static "js/status.js" %}"></script>
+
+{% endblock %}

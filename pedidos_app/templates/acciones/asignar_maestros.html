@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %} Asignar Maestros {% endblock %}
+
+{% block head %} {% endblock %}
+
+{% block navtitulo %}Asignar Maestros{% endblock %}
+
+{% block container %}
+
+{% load filtros %}
+<br>
+<form action="/asignar/{{pedido.id}}" method="post" class="row">
+{% csrf_token %}
+<div class="row">
+    <div class="col">
+        <p style="font-size: 14px;" class="fw-light mb-0">ID {{pedido.id}} {{pedido.producto}} {{pedido.medidas}} {{pedido.color}} - {{pedido.cliente}}</p>
+        <table class="table table-striped table-bordered text-center align-middle">
+            <thead>
+                <tr class="align-middle">
+                    <th>PK</th>
+                    <th>Status Trabajo</th>
+                    <th>Maestro</th>
+                    <th>Trabajo</th>
+                    <th>Costo diario</th>
+                    <th>Días</th>
+                    <th>Total s/IMP</th>
+                    <th>Cantidad</th>
+                    <th>Total Pago</th>
+                    <th>Notas OT</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trabajo in pedido.presupuesto.trabajos.all|dictsort:"id" %}
+                <tr>
+                    <td>{{trabajo.id}}</td>
+                    {% if trabajo.status_trabajo == '0' %}
+                        <td class="bg-danger bg-gradient text-white">{{trabajo.get_status_trabajo_display}}</td>
+                    {% else %}
+                        <td class="bg-success bg-gradient text-white">{{trabajo.get_status_trabajo_display}}</td>
+                    {% endif %}
+                    <td>
+                        <input id="trabajo_id" name="trabajo_id" type="hidden" value="{{trabajo.id}}">
+                        <select name="maestro" id="{{trabajo.id}}" class="form-select text-center" aria-label="Default select example">
+                            {% if trabajo.status_pago == '1' %}  
+                                <option value="{{trabajo.maestro_asociado.id}}">{{trabajo.maestro_asociado.nombre}} {{trabajo.maestro_asociado.apellido}} *</option>
+                            {% else %}
+                                <option value="0">Seleccionar</option>
+                                {% for maestro in maestros %}
+                                    <option value="{{maestro.id}}" {% if trabajo.maestro_asociado.id == maestro.id %} selected="selected" {% endif %}>{{maestro.nombre}} {{maestro.apellido}}</option>
+                                {% endfor %}                                        
+                            {% endif %}                                        
+                        </select>                    
+                    </td>
+                    <td>{{trabajo.tipo_trabajo}}</td>
+                    <td>{{trabajo.costo_trabajo |formato_peso}}</td>
+                    <td>{{trabajo.dias_trabajo}}</td>
+                    <td>{{trabajo.total_simp |formato_peso}}</td>
+                    <td>{{trabajo.presupuesto_asociado.pedido.cantidad}}</td>
+                    <td>{{trabajo.total_pago |formato_peso}}</td>
+                    <td>
+                        <textarea rows="3" cols="40" name="notas_ot" id="notas_ot">{{trabajo.notas_trabajo}}</textarea> 
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>       
+        </table>                         
+
+    </div>
+</div>
+<div class="row">
+    <p class="fst-italic">*Los trabajos que se encuentran pagados no se pueden re asignar</p>
+    <p class="fst-italic">*La fecha de asignación se fijará al momento de imprimir la Orden de Trabajo</p>
+    <p class="fst-italic">*Si se reasigna un trabajo, se borra la fecha de asignación previa (hay que volver a imprimir la OT)</p>
+</div>
+
+<div class="row justify-content-center">
+    {% if request.session.excepcion != 1 %}
+    <div class="col-1 text-center">
+        <a class="btn btn-dark" style="width:100%" onclick="history.back()">Volver</a>
+    </div>
+    {% endif %}
+    <div class="col-1 text-center">
+        <button type="submit" class="btn btn-success text-nowrap">
+            {% if request.session.excepcion == 1 %}
+            Guardar y volver al presupuesto
+            {% elif pedido.status > '3' %}
+            Guardar
+            {% else %}
+            Enviar a producción
+            {% endif %}
+        </button>
+        <br>
+        <br>
+    </div>
+</div>               
+</form>
+
+{% endblock %}

@@ -1,0 +1,268 @@
+{% extends 'base.html' %}
+
+{% block title %} Lista de Producción {% endblock %}
+
+{% block head %}
+<!-- Datatables  -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.3/fh-3.2.1/datatables.min.css" />
+{% endblock %}
+
+{% block navtitulo %} Pedidos en Producción {% endblock %}
+
+{% block container %}
+
+{% load filtros %}
+<div class="row justify-content-end">
+    <div class="col-3 selectors">
+    </div>
+    <hr>
+</div>
+<br>
+<table id="tabla-produccion" class="display table table-bordered table-striped text-center align-middle" width="100%">
+    <thead>
+        <tr class="align-middle">
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Fecha de confirmación</th>
+            <th style="display:none;">Fecha de confirmación*</th>
+            <th>Fecha Ingreso Fábrica</th>
+            <th style="display:none;">Fecha Ingreso Fábrica*</th>
+            <th>Trabajos</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<!-- Modal del producto -->
+<div class="modal fade" id="dashModal" tabindex="-1" aria-labelledby="dashModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title col-11" id="dashModalLabel"></h5>
+                <button type="button" class="btn-close col-1" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body row pb-0">
+                <div class="col">
+                    <table class="table table-success table-bordered align-middle">
+                        <tr>
+                            <th class="text-center">Producto</th>
+                            <td id="productoModal" class="text-left"></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Medidas</th>
+                            <td id="medidasModal" class="text-left"></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Madera</th>
+                            <td id="maderaModal" class="text-left"></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Color</th>
+                            <td id="colorModal" class="text-left"></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Cantidad</th>
+                            <td id="cantidadModal" class="text-left"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col">
+                    <table class="table table-light table-bordered align-middle">
+                        <tr>
+                            <th class="text-center">Cliente</th>
+                            <td id="clienteModal" class="text-left"></td>
+                        </tr>                
+                        <tr>
+                            <th class="text-center">Fecha de Ingreso</th>
+                            <td id="fechaingresoModal" class="text-left"></td>
+                        </tr>                
+                        <tr>
+                            <th class="text-center text-nowrap">Fecha Confirmación</th>
+                            <td id="fechaconfirmacionModal" class="text-left"></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center text-nowrap">Fecha Ingreso Fábrica</th>
+                            <td id="fechaingresofabricaModal" class="text-left"></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center text-nowrap">Fecha Término</th>
+                            <td id="fechaterminoModal" class="text-left"></td>
+                        </tr>
+                        
+                    </table>
+                </div>               
+                
+            </div>
+            <div class="modal-body row pt-0">
+                <div class="col">
+                    <table class="table table-success table-bordered align-middle">
+                        <tr>
+                            <th class="text-center bg-dark bg-gradient text-white">Detalles de fabricación</th>
+                            <th colspan="2" class="text-center bg-dark bg-gradient text-white">Detalles de pintura</th>
+                        </tr>
+                        <tr>
+                            <td rowspan="4" style ="word-break:break-all;" id="detallesfabModal" class="text-center table-info"></td>
+                            <td colspan="2" width="50%" style ="word-break:break-all" id="detallespinModal" class="text-center table-info"></td>                            
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-body row pt-0">                
+            </div>
+            <div class="modal-footer justify-content-between">
+                <div class="col">
+                    <a class="btn btn-warning" id="infoModal">Más información</a>
+                </div>
+                <div class="col text-nowrap text-end">
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal de Trabajo -->
+<div class="modal fade" id="modal_trabajo" tabindex="-1" aria-labelledby="dashModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title col-11" id="tituloModal"></h5>
+                <button type="button" class="btn-close col-1" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <p id="status_modal_trabajo" style="width: 100%;"></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <table class="table table-warning table-bordered text-center">
+                            <tr>
+                                <th>Fecha de Asignación</th>
+                                <td id="fechaasignacion_modal_trabajo"></td>
+                            </tr>                   
+                        </table>
+                    </div>
+                    <div class="col">
+                        <table class="table table-success table-bordered text-center">
+                            <tr>
+                                <th>Fecha de Término</th>
+                                <td id="fechatermino_modal_trabajo"></td>
+                            </tr>                      
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <table class="table table-striped table-bordered text-center align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Detalles de Fabricación</th>
+                                    <th>Detalles de Pintura</th>
+                                    <th>Notas Orden de Trabajo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style ="word-break:break-all;" id="detallesfabricacion_modal_trabajo"></td>
+                                    <td style ="word-break:break-all;" id="detallespintura_modal_trabajo"></td>
+                                    <td style ="word-break:break-all;" id="notastrabajo_modal_trabajo"></td>                                    
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>                
+                <div class="row text-center">
+                    <div class="col">
+                        <h5>Presupuesto unitario</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <table class="table table-primary table-bordered text-center align-middle">
+                            <thead>
+                                <th>Costo Diario</th>
+                                <th>Imposiciones</th>
+                                <th>Días</th>
+                                <th>Total s/IMP</th>
+                                <th>Total c/IMP</th>
+                            </thead>
+                            <tbody>
+                                <td id="costodiario_modal_trabajo"></td>
+                                <td id="imposiciones_modal_trabajo"></td>
+                                <td id="dias_modal_trabajo"></td>
+                                <td id="totalsimp_modal_trabajo"></td>
+                                <td id="total_modal_trabajo"></td>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row text-center">
+                    <div class="col">
+                        <h5>Presupuesto x cantidad</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <table class="table table-primary table-bordered text-center align-middle">
+                            <thead>
+                                <th>Cantidad</th>
+                                <th>Total s/IMP general</th>
+                                <th>Total c/IMP general</th>
+                            </thead>
+                            <tbody>
+                                <td id="cantidad_modal_trabajo"></td>
+                                <td id="totalsimpgeneral_modal_trabajo"></td>
+                                <td id="totalgeneral_modal_trabajo"></td>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-5">
+                        <table class="table table-bordered text-center">
+                            <tr>
+                                <th>Status Pago</th>
+                                <th>Fecha Pago</th>
+                            </tr>
+                            <tr>
+                                <td id="statuspago_modal_trabajo" class="text-center"></td>
+                                <td id="fechapago_modal_trabajo" class="text-center"></td>
+                            </tr>                   
+                        </table>
+                    </div>
+                </div> 
+            </div>
+            <div class="modal-footer justify-content-between">
+                <div class="col">
+                    <a class="btn btn-warning" id="info_modal_trabajo">Más información</a>
+                </div>
+                <div class="col text-end">
+                    <a class="btn btn-secondary" id="ot_modal_trabajo">Orden de Trabajo</a>
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Final del Modal de Trabajo -->
+  
+<!--cargar javascript del archivo produccion.js-->
+{% load static %}
+<script src="{% static "js/produccion.js" %}"></script>
+
+<!-- datatables:  -->
+<script type="text/javascript"
+src="https://cdn.datatables.net/v/dt/dt-1.11.3/fh-3.2.1/datatables.min.js"></script>
+
+<!-- moment (para formatear fecha): -->
+<script type="text/javascript"
+src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script type="text/javascript"
+src="//cdn.datatables.net/plug-ins/1.10.21/sorting/datetime-moment.js"></script>
+
+{% endblock %}

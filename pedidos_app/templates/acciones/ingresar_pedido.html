@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% block title %} Ingresar Pedido {% endblock %}
+{% block navtitulo %} Ingresar Pedido {% endblock %}
+{% block container %}
+
+<br />
+<table id="tabla-pedidos" class="display table table-warning table-bordered table-striped text-center align-middle">
+    <thead>
+        <tr>
+            <th>PK</th>
+            <th>Cliente</th>
+            <th>Email</th>
+            <th>Celular</th>
+            <th>Últimos pedidos ingresados:</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{cliente.id}}</td>
+            <td>{{cliente}}</td>
+            <td>{{cliente.email}}</td>
+            {% if cliente.celular == Null %}
+            <td></td>
+            {% else %}
+            <td>{{cliente.celular}}</td>
+            {% endif %}
+            <td>
+                {% for pedido in pedidos %}
+                    <a href="/pedido/{{pedido.id}}">ID {{pedido.id}} - {{pedido.producto}} - {{pedido.medidas}} <br></a>
+                {% endfor %}
+                <a href="#pedidosModal" data-bs-toggle="modal" data-bs-target="#pedidosModal" class="listapedidos fw-bold" data-id={{cliente.id}}>Ver lista completa</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br />
+<form action="/ingresarpedido" method="post" class="row">
+    {% csrf_token %}
+
+    <input name="pk" type="hidden" class="form-control" id="pk" value="{{cliente.id}}" />
+    <div class="col">
+        <table class="display table table-light table-bordered text-center align-middle">
+            <tr style="display:none">
+                <th>Accion</th>
+                <td>
+                    <input name="accion" required type="text" class="form-control" id="accion" value={{accion}}>
+                </td>
+            </tr>
+            <tr style="display:none">
+                <th>ID Pedido</th>
+                <td>
+                    <input name="idpedido" type="text" class="form-control" id="idpedido" value="{{pedido.id}}">
+                </td>
+            </tr>
+            <tr>
+                <th>Producto</th>
+                <td>
+                    <input name="producto" maxlength="45" required type="text" class="form-control" id="producto" value="{{pedido.producto}}"/>
+                </td>
+            </tr>
+            <tr>
+                <th>Medidas</th>
+                <td>
+                    <input name="medidas" required type="text" class="form-control" id="medidas"  maxlength="40" value="{{pedido.medidas}}" />
+                </td>
+            </tr>
+            <tr>
+                <th>Color</th>
+                <td class="text-start">
+                    <input name="color" required type="text" class="form-control" id="color" maxlength="60" value="{{pedido.color}}" />
+                    <input type="checkbox" id="checkbox" onclick="color_checkbox()" /><span class="fw-light"
+                        style="font-size: 14px"> Si el color está pendiente marca esta casilla</span>
+                </td>
+            </tr> 
+            <tr>
+                <th>Madera</th>
+                <td>
+                    <input name="madera" required type="text" class="form-control" id="madera"  maxlength="40" value="{{pedido.madera}}" />
+                </td>
+            </tr>
+            <tr>
+                <th>Cantidad</th>
+                <td>
+                    <input required id="cantidad" name="cantidad" type="number" min="1"  maxlength="2" class="form-control"
+                        value="{{pedido.cantidad}}" />               
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="col">
+        <table class="display table table-bordered text-center align-middle">
+            <tr>
+                <th>Detalles de fabricación</th>
+                <td>
+                    <textarea name="detalles_fabricacion" id="detalles_fabricacion" rows="6"
+                        class="form-control">{{pedido.detalles_fabricacion}}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <th>Detalles de Pintura</th>
+                <td>
+                    <textarea name="detalles_pintura" id="detalles_pintura" rows="5" class="form-control">{{pedido.detalles_pintura}}</textarea>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-1 text-center">
+            <a class="btn btn-dark" onclick="history.back()">Volver</a>
+        </div>
+        <div class="col-1 text-center">
+            <button type="submit" class="btn btn-success text-nowrap">
+                Guardar Pedido
+            </button>
+            <br>
+            <br>
+        </div>
+    </div>
+</form>
+
+<!-- Modal Lista de pedidos del cliente -->
+<div class="modal fade" id="pedidosModal" tabindex="-1" aria-labelledby="pedidosModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h5 class="modal-title col-11" id="pedidosModalLabel"></h5>
+                    <button type="button" class="btn-close col-1" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">                
+                    <table class="table table-striped table-bordered text-center align-middle">
+                        <thead>
+                            <th>ID</th>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th class="text-nowrap">Fecha Ingreso</th>
+                            <th>Fecha Término</th>
+                            <th>Status</th>
+                        </thead>
+                        <tbody>
+                        </tbody>                   
+                    </table>  
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+        </div>
+    </div>
+</div>
+
+<!--cargar archivo javascript-->
+{% load static %}
+<script src="{% static "js/ingresar_pedido.js" %}"></script>
+
+{% endblock %}

@@ -1,0 +1,520 @@
+{% extends 'base.html' %}
+
+{% block title %} Cotización {% endblock %}
+
+{% block navtitulo %} 
+Presupuesto Pedido ID {{pedido.id}} 
+{% endblock %}
+
+{% block container %}
+
+{% load filtros %}
+{% load tags %}
+
+<br>
+<div class="row text-center d-flex justify-content-center">
+    <div class="col">
+        {% if pedido.status == "0" %} <!-- Pendiente -->
+            <p class="text-center bg-danger text-white fw-bold">{{pedido.get_status_display}}</p>
+        {% elif pedido.status == "1" %} <!-- En Revisión -->
+            <p class="text-center bg-warning fw-bold">{{pedido.get_status_display}}</p>
+        {% elif pedido.status == "2" %} <!-- No confirmado -->
+            <p class="text-center bg-info fw-bold">{{pedido.get_status_display}}</p>
+        {% elif pedido.status == "3" %}  <!-- Confirmado -->
+            <p class="text-center bg-success text-white fw-bold">{{pedido.get_status_display}}</p>
+        {% elif pedido.status == "4" %}  <!-- En fabricación -->
+            <p class="text-center bg-secondary text-white fw-bold">{{pedido.get_status_display}}</p>
+        {% elif pedido.status == "5" %}  <!-- Terminando -->
+            <p class="text-center bg-primary text-white fw-bold">{{pedido.get_status_display}}</p>
+        {% elif pedido.status == "6" %}  <!-- Anulado -->
+            <p class="text-center bg-dark text-white fw-bold">{{pedido.get_status_display}}</p>      
+        {% endif %}              
+    </div>
+    <div class="col text-end">
+        <a href="/pedido/{{pedido.id}}/base">Basarse en presupuesto existente</a>
+    </div>
+    <!-- <p class="d-flex justify-content-end"><a href="">Basarse en presupuesto existente</a></p> -->
+</div>
+            
+<!-- Sección datos Pedido -->
+<div class="row text-left">
+
+    <!-- Tabla datos del pedido -->
+    <div class="col mb-3">
+        <table class="table table-striped table-bordered">
+            <tr>
+                <th>Cliente</th>
+                <td>{{pedido.cliente}} {% if pedido.reserva_tienda == 1 %} (Tienda) {% endif %}</td>
+            </tr>                
+            <tr>
+                <th>Email</th>
+                <td>{{pedido.cliente.email}}</td>
+            </tr>
+            <tr>
+                <th>Producto</th>
+                <td>{{pedido.producto}}</td>
+            </tr>
+            <tr>
+                <th>Medidas</th>
+                <td>{{pedido.medidas}}</td>
+            </tr>
+            <tr>
+                <th>Madera</th>
+                <td>{{pedido.madera}}</td>
+            </tr>
+            <tr>
+                <th>Color</th>
+                <td>{{pedido.color}}</td>                                        
+            </tr>
+            <tr>
+                <th>Detalles de Fabricación</th>
+                <td style ="word-break:break-all;" id="detallesfabModal">{{pedido.detalles_fabricacion}}</td>
+            </tr>
+            <tr>
+                <th>Detalles de Pintura</th>
+                <td style ="word-break:break-all;" id="detallespinModal">{{pedido.detalles_pintura}}</td>
+            </tr>
+            <tr>
+                <th>Fecha de Ingreso</th>
+                <td>{{pedido.fecha_creacion}}</td>                                        
+            </tr>
+        </table>
+    </div>
+
+    <!-- Columna Status y Notas del Pedido -->
+    <div class="col mb-3 text-center">                                
+        <form id="agregar_notas_presupuesto" method="post">
+            <p class="fw-bold">Notas del Presupuesto (Uso interno)</p>
+            <br>
+            <textarea rows="10" cols="70" name="notas_presupuesto" id="notas_presupuesto">{{pedido.presupuesto.notas_presupuesto}}</textarea>    
+        </form>
+    </div>
+</div>
+
+<div class="row text-center">
+    <h3>Añadir trabajos</h3>             
+</div>
+            
+<form id="agregar_trabajo" method="post" class="row text-left">
+    {% csrf_token %}
+    
+    <!-- tabla para añadir trabajos: -->
+    <input id="pedido_id" type="hidden" value="{{pedido.id}}">
+    <table class="table table-striped table-bordered text-center align-middle" id="tabla_trabajos">
+        <thead>
+            <tr>
+                <th>Trabajo</th>
+                <th>Costo diario</th>
+                <th>Días</th>
+                <th>Imposiciones</th>
+                <th>Total s/IMP</th>
+                <th>Total c/IMP</th>
+                <th>Notas para la OT</th>
+                <th style="display:none">Acción</th>
+            </tr>                
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <select name="tipo_trabajo" id="tipo_trabajo" class="form-select" aria-label="Default select example">
+                        <option value="0">Seleccionar</option>
+                        {% for oficio in mod %}
+                        <option value="{{oficio.id}}">{{oficio.oficio}}</option>
+                        {% endfor %}                                        
+                    </select>                                    
+                </td>
+                <td>
+                    <input name="costo_diario" id="costo_diario" type="number" class="form-control text-center" value="" min="0"> 
+                </td>
+                <td>
+                    <input name="dias" id="dias" type="number" class="form-control text-center" value="" step="0.1" min="0" style="width:70px"> 
+                </td>
+                <td>
+                    <input name="imposiciones" id="imposiciones" class="form-control text-center" size="3" value="{{imposiciones.total}}">
+                </td>
+                <td id="calcular_simp">
+                    $0
+                </td>
+                <td id="calcular_trabajo">
+                    $0
+                </td>
+                <td class="col-2">
+                    <textarea name="notas_trabajo" id="notas_trabajo" cols="40" rows="3"></textarea>
+                </td>
+                <td id="accion_trabajo" value="0" style="display:none">crear</td>  
+            </tr>            
+        </tbody>
+    </table>
+    <p style="font-size:13px" class="text-danger mb-0" id="advertencia_trabajo"></p>    
+</form>
+
+<div class="row justify-content-center">
+    <div class="col-1">
+        <button type="button" class="btn btn-outline-dark" id="add_row" onclick="GuardarTrabajo()">Agregar</button>
+        <br>  
+        <br> 
+    </div>
+</div>
+
+<div class="row text-left">
+    <!-- Tabla Lista de trabajos  -->                
+    <table class="table table-striped table-bordered text-center align-middle" id="lista_trabajos">
+        <thead>
+            <tr>
+                <th>Trabajo</th>
+                <th>Costo diario</th>
+                <th>Días</th>
+                <th>Imposiciones</th>
+                <th>Total s/IMP</th>
+                <th>Total c/IMP</th>
+                <th>Notas para la OT</th>
+                <th>Opciones</th>
+            </tr>                
+        </thead>
+        <tbody>
+            {% for trabajos in pedido.presupuesto.trabajos.all|dictsort:"id" %}
+                <tr id="trabajos_{{trabajos.id}}"> 
+                    <td>
+                        <p class="mb-0">{{trabajos.tipo_trabajo.oficio}}<br><span class="fst-italic fw-light">{% if trabajo.maestro_asociado != None %} {{trabajos.maestro_asociado}} {% endif %}</span></p>
+                        {% if trabajos.status_pago == '1' %}                               
+                            <p class="bg-success text-white">Pagado</p>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {{trabajos.costo_trabajo |formato_peso }}
+                        <p style="font-size:12px" class="text-danger mb-0">{% costo_trabajo_actualizado trabajos.id trabajos.tipo_trabajo.id %}</p>                        
+                    </td>
+
+                    <td>
+                        {{trabajos.dias_trabajo}}                               
+                    </td>
+                    <td>
+                        {{trabajos.imposiciones |formato_peso}}
+                        <p style="font-size:12px" class="text-danger mb-0">{% imposiciones_actualizadas trabajos.id %}</p>                        
+                    </td>
+
+                    <td>
+                        {{trabajos.total_simp |formato_peso }}                              
+                    </td>
+
+                    <td>
+                        {{trabajos.total_trabajo |formato_peso }}                              
+                    </td>
+
+                    <td style ="word-break:break-all; max-width: 420px;">
+                        {{trabajos.notas_trabajo}}                               
+                    </td>
+
+                    <td>
+                        <button class="btn btn-warning btn-sm" name="editar_trabajo" data-id={{trabajos.id}}>Editar</button> <button class="btn btn-danger btn-sm" name="eliminar_trabajo" data-id={{trabajos.id}}>Borrar</button>                              
+                    </td>
+                </tr>
+                {% endfor %}                      
+                <tr id="totales_trabajo">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="fw-bold">{{totales.total_trabajos_simp | formato_peso}}</td>
+                    <td class="fw-bold">{{totales.total_trabajos | formato_peso}}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+        </tbody>
+    </table>
+</div>
+            
+<!-- seccion materiales: -->
+<br>
+<div class="row text-center">
+    <h3>Añadir Materiales</h3>             
+</div>
+
+<!-- Tabla añadir material -->
+<form id="agregar_material" method="post" class="row text-left">
+    {% csrf_token %}
+    <table class="table table-striped table-bordered text-center align-middle" id="tabla_materiales">
+        <tr>
+            <th>Categoría</th>
+            <th>Material</th>
+            <th>Costo unitario neto</th>
+            <th>Cantidad</th>
+            <th>Unidad</th>
+            <th>Total</th>
+            <th style="display:none">Accion</th>
+        </tr>                
+        <tr>
+            <td>
+                <select name="categoria_materiales" id="categoria_materiales" class="form-select" aria-label="Default select example">
+                    <option value="0">Seleccionar</option>
+                    {% for categoria in materiales %}
+                    <option value="{{categoria.id}}">{{categoria.categoria}}</option>
+                    {% endfor %}                                        
+                </select>  
+            </td>
+            <td>
+                <select name="materiales" id="materiales" class="form-select" aria-label="Default select example">
+                    <option></option>
+                </select> 
+            </td>
+            <td>
+                <input name="costo_mat" id="costo_mat" type="number" class="form-control text-center" min="0" value="0" size="1"> 
+            </td>
+            <td>
+                <input name="cantidad" id="cantidad" type="number" class="form-control text-center" min="0" value="" size="1"> 
+            </td>
+            <td name="unidad_medida" id="unidad_medida"> - </td>
+            <td name="total_material" id="total_material">$0</td>    
+            <td id="accion_material" style="display:none">crear</td>       
+        </tr>        
+    </table>
+    <p style="font-size:13px" class="text-danger mb-0" id="advertencia_material"></p>    
+</form>
+
+<div class="row justify-content-center">
+    <div class="col-1">
+        <button type="button" class="btn btn-outline-dark" id="add_row" onclick="GuardarMaterial()">Agregar</button>
+        <br>  
+        <br> 
+    </div>
+</div>
+
+<!-- Tabla lista de materiales -->
+<div class="row text-left">
+    <table class="table table-striped table-bordered text-center align-middle" id="lista_materiales">
+        <thead>
+            <tr>
+                <th>Categoría</th>
+                <th>Material</th>
+                <th>Costo unitario neto</th>
+                <th>Cantidad</th>
+                <th>Unidad</th>
+                <th>Total</th>
+                <th>Opciones</th>
+            </tr>                
+        </thead>    
+        <tbody>
+            {% for material in pedido.presupuesto.materiales.all %}
+                <tr id="material_{{material.id}}">
+                    <td>
+                        {{material.material_asignado.categoria.categoria}}                               
+                    </td>
+
+                    <td>
+                        {{material.material_asignado.material}}                               
+                    </td>
+
+                    <td>
+                        {{material.costo_material |formato_peso}}
+                        <p style="font-size:12px" class="text-danger mb-0">{% costo_material_actualizado material.id material.material_asignado.id %}</p>                        
+                    </td>
+
+                    <td>
+                        {{material.cantidad}}                              
+                    </td>
+
+                    <td>
+                        {{material.material_asignado.unidad_medida}}                              
+                    </td>
+
+                    <td>
+                        {{material.total_material |formato_peso}}                               
+                    </td>
+                    
+                    <td>
+                        <button class="btn btn-warning btn-sm" name="editar_material" data-id={{material.id}}>Editar</button> <button class="btn btn-danger btn-sm" name="eliminar_material" data-id={{material.id}}>Borrar</button>                              
+                    </td>
+                </tr>
+                {% endfor %}                      
+                <tr id="totales_material">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="fw-bold">{{totales.total_materiales | formato_peso}}</td>
+                    <td></td>
+                </tr>
+        </tbody>
+    </table>               
+</div>
+
+<!-- Datos finales - Costos y % -->
+<h3 class="text-center">
+    <br>
+    Añadir gastos y utilidad
+</h3>
+
+<!-- Tabla añadir otros costos y margen -->
+<form id="agregar_costos" method="post" class="row text-left">
+    {% csrf_token %}
+    <table class="table table-striped table-bordered text-center align-middle" id="tabla_costos">
+        <tr>
+            <th>Costos directos <br><span class="fw-light">materiales + mano de obra</span></th>
+            <th colspan="2">Gastos Generales <br><span class="fw-light">% sobre los costos directos</span></th>
+            <th class="align-top">Otros gastos <br><span class="fw-light">en $</span></th>
+            <th>Margen (%) <br><a href="#ModalMargen" data-bs-toggle="modal" data-bs-target="#ModalMargen" class="fw-light text-decoration-none"">buscar % con subtotal / total</a></th>
+        </tr>                
+        <tr> 
+            <td id="costos_directos">{{totales.costos_directos_unit | formato_peso}}</td>
+            <td>
+                <input name="porcentaje_gastos_generales" id="porcentaje_gastos_generales" type="number" class="form-control text-center" min="0" max="300" size="1" value="0"> 
+            </td>
+            <td id="resultado_gastos_generales"><pre>        </pre></td>
+            <td>
+                <input name="otros_gastos" id="otros_gastos" type="number" class="form-control text-center" value="0">  
+            </td>
+            <td>
+                <input name="porcentaje_utilidad" id="porcentaje_utilidad" type="number" class="form-control text-center" min="0" max="99" value="0">
+            </td>
+        </tr>                            
+    </table>        
+</form>
+<pre class="text-end" id="preliminar_total">Subtotal: -    |    Total:-    |    Rentabilidad: -</pre>
+<div class="row justify-content-center">
+    <div class="col-1">
+        <button type="button" class="btn btn-outline-dark" id="add_row" onclick="GuardarGastos()">Agregar</button>
+    </div>
+    <div class="col-1">
+        <button type="button" class="btn btn-outline-dark" id="add_row" onclick="EditarGastos()">Editar</button>       
+    </div>
+</div>
+<br>
+
+<!-- Tabla cantidad  -->
+<div class="row justify-content-center">
+        <div class="row col-3">
+            <table class="table table-striped table-bordered text-center" id="tabla_cantidad">
+                <tr>
+                    <th>Conjunto de fabricación</th>
+                </tr>                
+                <tr> 
+                    <td>
+                        <input name="cantidad_conjunto" id="cantidad_conjunto" min='1' type="number" class="form-control text-center" value="{{pedido.cantidad}}"> 
+                    </td>
+                </tr>                            
+            </table>      
+        </div>
+</div>
+
+<!-- Tabla final resumen -->
+<h3 class="text-center">
+    <br>
+    Total Pedido
+</h3>
+<div class="d-flex justify-content-center">
+    <table class="table table-striped table-bordered w-50 text-center">
+        <tr>
+            <th></th>
+            <th>Unitario</th>
+            <th {% if pedido.cantidad < 2 %} style="display:none" {% endif %} id="encabezado_total_final">Total</th>
+        </tr>
+        <tr>
+            <th>Costos directos</th>
+            <td id="costos_directos_final_unit">{{totales.costos_directos_unit | formato_peso}}</td>
+            <td {% if pedido.cantidad < 2 %} style="display:none" {% endif %} id="costos_directos_final">{{totales.costos_directos_total | formato_peso}}</td>
+        </tr>                
+        <tr>
+            <th>Gastos generales</th>
+            <td id="gastos_generales_final_unit">{{totales.gastos_generales_unit | formato_peso}}</td>
+            <td {% if pedido.cantidad < 2 %} style="display:none" {% endif %} id="gastos_generales_final">{{totales.gastos_generales_total | formato_peso}}</td>
+        </tr>
+        <tr>
+            <th>Otros gastos</th>
+            <td id ="otros_gastos_final_unit">{{totales.otros_gastos_unit | formato_peso}}</td>
+            <td {% if pedido.cantidad < 2 %} style="display:none" {% endif %} id ="otros_gastos_final">{{totales.otros_gastos_total | formato_peso}}</td>
+        </tr>
+        <tr>
+            <th>Total costos</th>
+            <td id="total_costos_final_unit">{{totales.total_costos_unit | formato_peso}}</td>
+            <td {% if pedido.cantidad < 2 %} style="display:none" {% endif %} id="total_costos_final">{{totales.total_costos | formato_peso}}</td>
+        </tr>
+        <tr>
+            <th>Utilidad</th>
+            <td id="utilidad_final_unit">{{totales.porcentaje_utilidad | formato_porcentaje}}</td>
+            <td {% if pedido.cantidad < 2 %} style="display:none" {% endif %} id="utilidad_final">{{totales.porcentaje_utilidad | formato_porcentaje}}</td>
+        </tr>
+        <tr>
+            <th>Subtotal</th>
+            <td id="subtotal_final_unit">{{totales.subtotal_unit | formato_peso}}</td>                                        
+            <td {% if pedido.cantidad < 2 %} style="display:none" {% endif %} id="subtotal_final">{{totales.subtotal | formato_peso}}</td>                                        
+        </tr>
+        <tr>
+            <th>IVA</th>
+            <td id="iva_final_unit">{{totales.iva_unit | formato_peso}}</td>                                        
+            <td {% if pedido.cantidad < 2 %} style="display:none" {% endif %} id="iva_final">{{totales.iva | formato_peso}}</td>                                        
+        </tr>
+        <tr>
+            <th>Total</th>
+            <td id="total_final_unit">{{totales.total_unit | formato_peso}}</td>                                        
+            <td {% if pedido.cantidad < 2 %} style="display:none" {% endif %} id="total_final">{{totales.total | formato_peso}}</td>                                        
+        </tr>
+        <tr>
+            <th>Rentabilidad</th>
+            <td id="rentabilidad_final_unit">{{totales.rentabilidad_unit | formato_peso}}</td>                                        
+            <td {% if pedido.cantidad < 2 %} style="display:none" {% endif %} id="rentabilidad_final">{{totales.rentabilidad | formato_peso}}</td>                                        
+        </tr>
+    </table>          
+</div>
+            
+<br>
+{% if pedido.status > '1' %}
+<div class="row justify-content-center">
+    <div class="col-2 text-center">
+        <a href="/database" class="btn btn-outline-dark" style="width:100%">Volver</a>
+        <br>  
+        <br> 
+    </div>
+</div>
+{% else %}
+    {% if request.user.is_staff %}
+    <div class="row justify-content-center">
+        <div class="col-2">
+            <a href="/pedido/{{pedido.id}}/aprobarpresupuesto" class="btn btn-outline-success text-nowrap" id="cerrar_presup">Aprobar Presupuesto</a>
+            <br>  
+            <br> 
+        </div>
+    </div>
+    {% else %}
+    <div class="row justify-content-center">
+        <div class="col-2">
+            <a href="/pedido/{{pedido.id}}/cerrarpresupuesto" class="btn btn-outline-dark" id="cerrar_presup">Enviar a revisión</a>
+            <br>  
+            <br> 
+        </div>
+    </div>
+    {% endif %}
+{% endif %}
+
+<!-- Modal de margen -->
+<div class="modal fade" id="ModalMargen" tabindex="-1" aria-labelledby="dashModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dashModalLabel">Buscar margen de utilidad</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">                   
+                Subtotal (neto) o total (bruto)?
+                <select name="selector_utilidad" id="selector_utilidad" class="form-select text-center" aria-label="Default select example">
+                    <option value="1">Subtotal</option>
+                    <option value="2" selected>Total</option>                                                               
+                </select>
+                <br>
+                Valor:
+                <input name="valor_buscado" id="valor_buscado" type="number" class="form-control text-center">
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" id="boton_utilidad">Agregar</a>
+                <button class="btn btn-secondary" data-bs-dismiss="modal" id="close_modalMargen">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+       
+<!--cargar javascript del archivo pedidos.js-->
+{% load static %}
+<script src="{% static "js/presupuesto.js" %}"></script>
+
+{% endblock %}

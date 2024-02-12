@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% block title %}Abonos por mes{% endblock %}
+{% block head %}
+<!-- Datatables  -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.3/fh-3.2.1/datatables.min.css" />
+
+{% endblock %}
+{% block navtitulo %}Abonos mensuales{% endblock %}
+{% block container %}
+
+{% load filtros %}
+{% load tags %}
+
+<br>
+<form action="/reportes/abonos" method="post">
+    {% csrf_token %}
+    <label for="start">Fecha:</label>
+    <input type="month" id="fecha" name="fecha" min="2020-01" value="{{fecha}}">
+    <button type="submit" class="btn btn-sm btn-dark">Ver info</button>
+
+</form>
+<hr>
+<div class="row">
+    <div class="col border-top border-2 border-dark p-4">
+        <h3 class="text-center">Total Abonos: <span class="text-success">{{total_abonos | formato_peso}}</span></h3>
+        <h5 class="text-center">Total Rentabilidad: <span class="text-danger">{{total_rentabilidad | formato_peso}}
+            </span></h5>
+    </div>
+
+</div>
+
+<form action="/reportes/abonos/revisar" method="post">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col border-top border-2 border-dark p-4">
+            <h4 class="text-center">Pedidos confirmados</h4>
+            <h5 class="text-center">Abonos: {{total_abonos_confirmados | formato_peso}} </h5>
+            <table id="tabla-ingresos" class="table table-bordered table-striped text-center align-middle" width="100%">
+                <thead>
+                    <tr class="align-middle">
+                        <th><input type="checkbox" onclick="toggle_confirmados(this)"></th>
+                        <th>Fecha</th>
+                        <th>ID</th>
+                        <th>Producto</th>
+                        <th>Cliente</th>
+                        <th>Cta</th>
+                        <th>Abono (50%)</th>
+                        <th>Revisión</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pedido in confirmados %}
+                    <tr>
+                        <td class="text-start">
+                            {% if pedido.abono_confirmacion == 0 %}
+                            <input type="checkbox" id="revision_confirmados" name="revision_confirmados"
+                                value="{{pedido.id}}" />
+                            {% endif %}
+                        </td>
+                        <td>{{pedido.fecha_confirmacion | formato_fecha_basico}}</td>
+                        <td>{{pedido.id}}</td>
+                        <td>{{pedido.producto}}</td>
+                        <td>{{pedido.cliente}}</td>
+                        <td>{% if pedido.cuenta == 0 %}  
+                            <span class="bg-warning fw-bold">&nbspT&nbsp</span>
+                            {% else %}
+                            <span class="bg-primary text-white fw-bold">&nbspF&nbsp</span>
+                            {% endif %}
+                        </td>
+                        <td>{% abono pedido.presupuesto.total pedido.cantidad %}</td>
+                        {% if pedido.abono_confirmacion == 0 %}<td class="bg-danger"><i title="Revisión pendiente"
+                                class="fa-solid fa-close text-white"></i></td>{% else %}<td class="bg-success"><i
+                                title="Revisado" class="fa-solid fa-check text-white"></i></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col border-top border-start border-2 border-dark p-4">
+            <h4 class="text-center">Pedidos terminados</h4>
+            <h5 class="text-center">Abonos: {{total_abonos_terminados | formato_peso}} </h5>
+            <table id="tabla-ingresos" class="table table-bordered table-striped text-center align-middle" width="100%">
+                <thead>
+                    <tr class="align-middle">
+                        <th><input type="checkbox" onclick="toggle_cerrados(this)"></th>
+                        <th>Fecha</th>
+                        <th>ID</th>
+                        <th>Producto</th>
+                        <th>Cliente</th>
+                        <th>Cta</th>
+                        <th>Abono (50%)</th>
+                        <th>Revisión</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pedido in terminados %}
+                    <tr>
+                        <td class="text-start">
+                            {% if pedido.abono_cierre == 0 %}
+                            <input type="checkbox" id="revision_cerrados" name="revision_cerrados"
+                                value="{{pedido.id}}" />
+                            {% endif %}
+                        </td>
+                        <td>{{pedido.fecha_cierre | formato_fecha_basico}}</td>
+                        <td>{{pedido.id}}</td>
+                        <td>{{pedido.producto}}</td>
+                        <td>{{pedido.cliente}}</td>
+                        <td>{% if pedido.cuenta == 0 %}  
+                            <span class="bg-warning fw-bold">&nbspT&nbsp</span>
+                            {% else %}
+                            <span class="bg-primary text-white fw-bold">&nbspF&nbsp</span>
+                            {% endif %}
+                        </td>
+                        <td>{% abono pedido.presupuesto.total pedido.cantidad %}</td>
+                        {% if pedido.abono_cierre == 0 %}<td class="bg-danger"><i title="Revisión pendiente"
+                                class="fa-solid fa-close text-white"></i></td>{% else %}<td class="bg-success"><i
+                                title="Revisado" class="fa-solid fa-check text-white"></i></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col text-center">
+            <button type="submit" class="btn btn-success text-nowrap">Marcar como revisado</button>
+            <br>
+            <br>
+        </div>
+    </div>
+</form>
+
+<script>
+    function toggle_confirmados(source) {
+        checkboxes = document.getElementsByName("revision_confirmados");
+        for (var i = 0, n = checkboxes.length; i < n; i++) {
+            checkboxes[i].checked = source.checked;
+        }
+    }
+
+    function toggle_cerrados(source) {
+        checkboxes = document.getElementsByName("revision_cerrados");
+        for (var i = 0, n = checkboxes.length; i < n; i++) {
+            checkboxes[i].checked = source.checked;
+        }
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,57 @@
+<!-- Template con el formato PDF final -->
+{% load static %}
+{% load filtros %}
+
+<div class="row justify-content-between">
+    <div class="col">
+        <h3>Presupuesto</h3>
+        <br>
+        <br>
+        <p style="line-height: 60%"><span class="fw-bold">Fecha: </span>&nbsp {{fecha_pdf | formato_fecha_sinhora}}</p>
+        <p style="line-height: 60%"><span class="fw-bold">Válido hasta: </span>&nbsp {{fecha_plazo | formato_fecha_sinhora}}</p>
+        <p style="line-height: 60%"><span class="fw-bold">Cliente: </span>&nbsp {{pedidos.0.pedido.cliente}}</p>
+    </div>
+</div>
+<br>
+<br>
+<div class="row">
+    <table class="display table table-striped text-center align-middle">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Producto</th>
+                <th>Valor</th>
+                <th>Cantidad</th>
+                <th>Total Neto</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pedido in pedidos %}
+            <tr>
+                <td>{{pedido.pedido.id}}</td>
+                <td>{{pedido.pedido.producto}}<br>
+                    {{pedido.pedido.medidas}}<br>
+                    {{pedido.pedido.madera}} - {{pedido.pedido.color}}
+                </td>
+                <td>{{pedido.totales.subtotal_unit | formato_peso}}</td>
+                <td>{{pedido.pedido.cantidad}}</td>
+                <td>{{pedido.totales.subtotal | formato_peso}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3"></td>
+                <td class="">Subtotal</td>
+                <td class="fw-bold">{{subtotal_presupuestos | formato_peso}}</td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+                <td class="">Total + IVA</td>
+                <td class="fw-bold">{{total_presupuestos | formato_peso}}</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<br>
+<br>
