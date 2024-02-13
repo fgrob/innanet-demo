@@ -16,7 +16,7 @@ DB_USER=****
 DB_PASSWORD=****
 DB_HOST=127.0.0.1
 ```
-
+## Capturas de pantalla
 <img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Home.png?raw=true" width="400" height="300"></img>
 <img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Home-modal.png?raw=true" width="400" height="300"></img>
 <img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Presupuesto.png?raw=true" width="400" height="300"></img>
