@@ -434,7 +434,7 @@ def cerrar_presupuesto(request, pedido_id):
 
 
 def aprobar_presupuesto(request, pedido_id):
-    if request.user.is_staff:
+    # if request.user.is_staff:
         pedido = Pedido.objects.get(id=pedido_id)
         pedido.status = 2  # cambia el status del pedido a 'no confirmado'
         pedido.fecha_confirmacion = None
@@ -442,7 +442,7 @@ def aprobar_presupuesto(request, pedido_id):
         pedido.save()
         messages.success(request, 'Status actualizado: No confirmado')
         return redirect('/pedidos')
-    else:
-        messages.error(request, 'Error. Solo los administradores pueden aprobar un presupuesto.')
-        return redirect('/pedidos')
+    # else:
+    #     messages.error(request, 'Error. Solo los administradores pueden aprobar un presupuesto.')
+    #     return redirect('/pedidos')
         

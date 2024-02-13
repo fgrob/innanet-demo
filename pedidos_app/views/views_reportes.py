@@ -15,15 +15,15 @@ def historial(request):
 
 def excel_ddbb(request):
 
-    if request.user.is_staff:
+    # if request.user.is_staff:
         return render(request, 'secciones/reportes/excelddbb.html')
-    else:
-        messages.error(request, 'No dispone de los privilegios para entrar a esta sección')
-        return redirect('/database')
+    # else:
+    #     messages.error(request, 'No dispone de los privilegios para entrar a esta sección')
+    #     return redirect('/database')
 
 def abonos_mensuales(request, año = timezone.now().year, mes = timezone.now().month):
 
-    if request.user.is_staff:
+    # if request.user.is_staff:
 
         try:
             nueva_fecha = request.POST['fecha']
@@ -65,9 +65,9 @@ def abonos_mensuales(request, año = timezone.now().year, mes = timezone.now().m
             'fecha': str(año) + "-" + str(mes)
         }
         return render(request, 'secciones/reportes/abonosxmes.html', context)
-    else:
-        messages.error(request, 'No dispone de los privilegios para entrar a esta sección')
-        return redirect('/database')
+    # else:
+    #     messages.error(request, 'No dispone de los privilegios para entrar a esta sección')
+    #     return redirect('/database')
 
 def revision_abonos(request):
 
@@ -88,7 +88,7 @@ def revision_abonos(request):
 
 def informe_resumen(request, año = timezone.now().year, mes = timezone.now().month):
 
-    if request.user.is_staff:
+    # if request.user.is_staff:
         try:
             nueva_fecha = request.POST['fecha']
             nueva_fecha = nueva_fecha.split("-")
@@ -215,8 +215,8 @@ def informe_resumen(request, año = timezone.now().year, mes = timezone.now().mo
 
 
         return render(request, 'secciones/reportes/informe_resumen.html', context)
-    else:
-        messages.error(request, 'No dispone de los privilegios para entrar a esta sección')
-        return redirect('/database')
+    # else:
+    #     messages.error(request, 'No dispone de los privilegios para entrar a esta sección')
+    #     return redirect('/database')
 
 

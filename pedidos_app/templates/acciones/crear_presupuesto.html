@@ -468,23 +468,18 @@ Presupuesto Pedido ID {{pedido.id}}
     </div>
 </div>
 {% else %}
-    {% if request.user.is_staff %}
-    <div class="row justify-content-center">
-        <div class="col-2">
-            <a href="/pedido/{{pedido.id}}/aprobarpresupuesto" class="btn btn-outline-success text-nowrap" id="cerrar_presup">Aprobar Presupuesto</a>
-            <br>  
-            <br> 
+<div class="row justify-content-center text-center">
+    <div class="col-12 mb-3">
+        <a href="/pedido/{{pedido.id}}/cerrarpresupuesto" class="btn btn-outline-dark" id="cerrar_presup">Enviar a revisión</a>
+    </div>
+
+    <div class="col-12 mb-3">
+        <a href="/pedido/{{pedido.id}}/aprobarpresupuesto" class="btn btn-outline-success text-nowrap" id="cerrar_presup">Aprobar Presupuesto</a>
+        <div class="mt-2">
+            (Esta opción es visible solamente para el staff en entornos de producción)
         </div>
     </div>
-    {% else %}
-    <div class="row justify-content-center">
-        <div class="col-2">
-            <a href="/pedido/{{pedido.id}}/cerrarpresupuesto" class="btn btn-outline-dark" id="cerrar_presup">Enviar a revisión</a>
-            <br>  
-            <br> 
-        </div>
-    </div>
-    {% endif %}
+</div>
 {% endif %}
 
 <!-- Modal de margen -->
