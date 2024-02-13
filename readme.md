@@ -19,34 +19,41 @@ DB_HOST=127.0.0.1
 
 ## Uso
 
-El flujo del programa es el siguiente:
-1. Sección 'Clientes':
-   -Ingresar cliente
-   -Ingresar pedido
-2. Sección 'Pedidos':
-   -Seleccionar pedido
-   -Cotizar
-   -Enviar presupuesto a revisión / Aprobar presupuesto
-   -Enviar presupuesto PDF a cliente
-   -Confirmar pedido
-   -Enviar a producción
-   -Asignar mano de obra que se encargará de fabricar el pedido
-4. Sección 'Producción'
-   -Descargar OT (Orden de trabajo) haciendo click en el status del trabajo (Pendiente)
-   -Marcar el trabajo como terminado
-   -Cerrar el pedido si todos los trabajos del pedido están terminados
-5. Sección 'Trabajos'
-   -Marcar como pagados los trabajos terminados
+El flujo del programa se organiza en las siguientes secciones:
+
+### 1. Sección 'Clientes':
+   - **Ingresar cliente**
+   - **Ingresar pedido**
+
+### 2. Sección 'Pedidos':
+   - **Seleccionar pedido**
+   - **Cotizar**
+   - **Enviar presupuesto a revisión / Aprobar presupuesto**
+   - **Enviar presupuesto PDF a cliente**
+   - **Confirmar pedido**
+   - **Enviar a producción**
+   - **Asignar mano de obra que se encargará de fabricar el pedido**
+
+### 3. Sección 'Producción':
+   - **Descargar OT (Orden de trabajo) haciendo clic en el status del trabajo (Pendiente)**
+   - **Marcar el trabajo como terminado**
+   - **Cerrar el pedido si todos los trabajos del pedido están terminados**
+
+### 4. Sección 'Trabajos':
+   - **Marcar como pagados los trabajos terminados**
 
 ### Otras opciones:
-Sección 'Base de datos'
-   -Toda la información relacionada a un pedido.
-   -Opciones de edición y cambio de status
-Sección 'Reportes'
-    -Logs del programa por usuario
-    -Informe de ventas y rentabilidad
-    -Información sobre abonos
-    -Descarga de datos para excel
+
+#### Sección 'Base de datos'
+   - **Toda la información relacionada a un pedido.**
+   - **Opciones de edición y cambio de status**
+
+#### Sección 'Reportes'
+   - **Logs del programa por usuario**
+   - **Informe de ventas y rentabilidad**
+   - **Información sobre abonos**
+   - **Descarga de datos para Excel**
+
 
 
 ## Capturas de pantalla
