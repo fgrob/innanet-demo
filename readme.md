@@ -1,4 +1,13 @@
-![image](https://github.com/fgrob/innanet-demo/assets/33871932/f5cf7873-409e-40ac-a9de-71eac9f92349)DJANGO_ENV=local
+# Innanet Demo
+
+Este repositorio contiene el código fuente de Innanet, una aplicación web desarrollada con Django para gestionar pedidos y producción de productos personalizados.
+
+## Configuración
+
+Asegúrate de configurar tu entorno local con las siguientes variables de entorno:
+
+```plaintext
+DJANGO_ENV=local
 SECRET_KEY=****
 DEBUG=True
 ALLOWED_HOSTS=127.0.0.1, localhost
@@ -6,6 +15,7 @@ DB_NAME=****
 DB_USER=****
 DB_PASSWORD=****
 DB_HOST=127.0.0.1
+```
 
 <img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Home.png?raw=true" width="25%"></img>
 <img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Home-modal.png?raw=true" width="25%"></img>
