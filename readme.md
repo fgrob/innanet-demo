@@ -2,9 +2,9 @@
 
 Este repositorio contiene el código fuente de Innanet, una aplicación web desarrollada con Django para gestionar la producción en una empresa manufacturera de muebles a pedido.
 
-Link demo: http://44.220.148.179/
-**Usuario: visitante
-**Pass: usuario1
+### Link demo: http://44.220.148.179/
+**Usuario: visitante**
+**Pass: usuario1**
 
 ## Configuración
 
