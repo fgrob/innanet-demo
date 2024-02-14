@@ -6,21 +6,6 @@ Este repositorio contiene el código fuente de Innanet, una aplicación web desa
    - **Usuario: visitante**
    - **Pass: usuario1**
 
-## Configuración
-
-Crear archivo .env en carpeta raíz del proyecto y editar datos según corresponda:
-
-```plaintext
-DJANGO_ENV=local
-SECRET_KEY=****
-DEBUG=True
-ALLOWED_HOSTS=127.0.0.1, localhost
-DB_NAME=****
-DB_USER=****
-DB_PASSWORD=****
-DB_HOST=127.0.0.1
-```
-
 ## Uso
 
 El flujo del programa se organiza en las siguientes secciones:
