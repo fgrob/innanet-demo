@@ -46,13 +46,13 @@ El flujo del programa se organiza en las siguientes secciones:
 
 
 ## Capturas de pantalla
-<img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Home.png?raw=true" width="400" height="300"></img>
-<img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Home-modal.png?raw=true" width="400" height="300"></img>
-<img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Presupuesto.png?raw=true" width="400" height="300"></img>
-<img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Produccion.png?raw=true" width="400" height="300"></img>
-<img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Produccion-modal.png?raw=true" width="400" height="300"></img>
-<img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Trabajos.png?raw=true" width="400" height="300"></img>
-<img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Informe%20Resumen.png?raw=true" width="400" height="300"></img>
+<img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Home.png?raw=true" width="200" height="100"></img>
+<img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Home-modal.png?raw=true" width="200" height="100"></img>
+<img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Presupuesto.png?raw=true" width="200" height="100"></img>
+<img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Produccion.png?raw=true" width="200" height="100"></img>
+<img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Produccion-modal.png?raw=true" width="200" height="100"></img>
+<img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Trabajos.png?raw=true" width="200" height="100"></img>
+<img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Informe%20Resumen.png?raw=true" width="200" height="100"></img>
 
 
 
