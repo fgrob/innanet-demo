@@ -27,7 +27,7 @@ El programa se organiza en varias secciones clave, cada una diseñada para facil
 - **Enviar presupuesto PDF a cliente**: Envío del presupuesto aprobado al cliente en formato PDF.
 - **Confirmar pedido**: Confirmación del pedido por parte del cliente.
 - **Enviar a producción**: Inicio del proceso de producción del pedido confirmado.
-- **Asignar mano de obra que se encargará de fabricar el pedido**: Asignación de tareas específicas a los maestros o trabajadores, utilizando una interfaz que permite seleccionar el personal adecuado para cada tarea del pedido.
+- **Asignar mano de obra que se encargará de fabricar el pedido**: Asignación de tareas específicas a los trabajadores, utilizando una interfaz que permite seleccionar el personal adecuado para cada tarea del pedido.
 
 ### 3. Sección 'Producción':
 - **Descargar OT (Orden de Trabajo)**: Descarga de la OT al hacer clic en el estado del trabajo (Pendiente), iniciando oficialmente la tarea asignada.
@@ -35,7 +35,7 @@ El programa se organiza en varias secciones clave, cada una diseñada para facil
 - **Cerrar el pedido**: Finalización del pedido cuando todos los trabajos asociados están terminados.
 
 ### 4. Sección 'Trabajos':
-- **Marcar como pagados los trabajos terminados**: Registro de los pagos a los trabajadores o proveedores por los trabajos completados.
+- **Marcar como pagados los trabajos terminados**: Registro de los pagos a los trabajadores por los trabajos completados.
 
 ### Otras opciones:
 - **Sección 'Base de datos'**: Acceso y gestión de toda la información relacionada con los pedidos, incluyendo opciones de edición y cambio de estado.
