@@ -53,7 +53,7 @@ El programa se organiza en varias secciones clave, cada una diseñada para facil
 ### Link demo: http://44.220.148.179
    - **Usuario: visitante**
    - **Pass: usuario1**
-   - 
+     
 ## Capturas de pantalla
 <img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Home.png?raw=true" width="200" height="100"></img>
 <img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Home-modal.png?raw=true" width="200" height="100"></img>
