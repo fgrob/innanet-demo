@@ -1,6 +1,5 @@
-# Innanet Demo: Gestión de Producción para Manufactura de Muebles
-
-Innanet es una solución web avanzada diseñada para optimizar la gestión de producción en el sector manufacturero de muebles a pedido.
+# Innanet Demo: Gestión de Producción
+Innanet es una solución web avanzada diseñada para optimizar la gestión de producción en empresa manufacturera de muebles a pedido.
 
 ## Propósito y Funcionalidad
 
