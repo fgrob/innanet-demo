@@ -8,7 +8,7 @@ El objetivo de Innanet es proporcionar una herramienta integral que facilite la 
 - **Gestión de Clientes y Pedidos**: Facilita la entrada y seguimiento de clientes y sus pedidos.
 - **Cotizaciones y Presupuestos**: Permite la creación y aprobación de presupuestos de manera eficiente.
 - **Planificación de la Producción**: Optimiza la asignación de recursos y la planificación de la producción.
-- **Seguimiento de la Producción**: Monitorea el estado de la producción en tiempo real.
+- **Seguimiento de la Producción**: Monitorea el estado de la producción.
 - **Reportes y Análisis**: Genera informes detallados para la toma de decisiones basada en datos.
 
 ## Flujo del Programa
