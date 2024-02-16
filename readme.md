@@ -49,7 +49,7 @@ El programa se organiza en varias secciones clave, cada una diseñada para facil
 - **Seguridad Web**: Implementación de medidas de seguridad para proteger la información y las transacciones.
 - **Automatización y Mejora de Procesos**: Automatización de tareas repetitivas y mejora de los flujos de trabajo de producción.
 
-### Link demo: http://44.220.148.179
+### Link demo: https://innanet.fdev.cl
    - **Usuario: visitante**
    - **Pass: usuario1**
      
