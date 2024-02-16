@@ -28,7 +28,11 @@ SECRET_KEY = config("SECRET_KEY")
 DEBUG = config("DEBUG")
 
 ALLOWED_HOSTS = config(
-    'ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')]
+    'ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')] if v else []
+)
+
+CSRF_TRUSTED_ORIGINS = config(
+    'CSRF_TRUSTED_ORIGINS', cast=lambda v: [s.strip() for s in v.split(',')] if v else []
 )
 
 # Application definition
@@ -43,7 +47,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -56,7 +59,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'auditlog.middleware.AuditlogMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'innanet.urls'
