@@ -51,8 +51,8 @@ The program is organized into several key sections, each designed to facilitate 
 - **Automation and Process Improvement**: Automation of repetitive tasks and improvement of production workflows.
 
 ### Demo Link: [Innanet Demo](https://innanet.fgrob.cl)
-   - **Username: visitante**
-   - **Password: usuario1**
+   - **Username: guest**
+   - **Password: user1234**
      
 ## Screenshots
 <img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Home.png?raw=true" width="200" height="100"></img>
