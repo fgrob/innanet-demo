@@ -1,59 +1,60 @@
-# Innanet Demo: Gestión de Producción
-Innanet es una solución web avanzada diseñada para optimizar la gestión de producción en empresa manufacturera de muebles a pedido.
+# Innanet Demo: Production Management
 
-## Propósito y Funcionalidad
+Innanet is an advanced web solution designed to optimize production management in a made-to-order furniture manufacturing company.
 
-El objetivo de Innanet es proporcionar una herramienta integral que facilite la gestión de todos los aspectos de la producción de muebles a pedido, desde la entrada del pedido hasta la entrega del producto final. Las características clave incluyen:
+## Purpose and Functionality
 
-- **Gestión de Clientes y Pedidos**: Facilita la entrada y seguimiento de clientes y sus pedidos.
-- **Cotizaciones y Presupuestos**: Permite la creación y aprobación de presupuestos de manera eficiente.
-- **Planificación de la Producción**: Optimiza la asignación de recursos y la planificación de la producción.
-- **Seguimiento de la Producción**: Monitorea el estado de la producción.
-- **Reportes y Análisis**: Genera informes detallados para la toma de decisiones basada en datos.
+The goal of Innanet is to provide a comprehensive tool that facilitates the management of all aspects of made-to-order furniture production, from order entry to final product delivery. Key features include:
 
-## Flujo del Programa
+- **Customer and Order Management**: Streamlines customer and order entry and tracking.
+- **Quotations and Budgets**: Efficiently creates and approves budgets.
+- **Production Planning**: Optimizes resource allocation and production planning.
+- **Production Tracking**: Monitors the production status.
+- **Reports and Analysis**: Generates detailed reports for data-driven decision-making.
 
-El programa se organiza en varias secciones clave, cada una diseñada para facilitar diferentes aspectos de la gestión de producción y pedidos. A continuación, se detalla el flujo mejorado:
+## Program Flow
 
-### 1. Sección 'Clientes':
-- **Ingresar cliente**: Registro de nuevos clientes en el sistema.
-- **Ingresar pedido**: Creación de pedidos asociados a los clientes registrados.
+The program is organized into several key sections, each designed to facilitate different aspects of production and order management. The enhanced flow is detailed below:
 
-### 2. Sección 'Pedidos':
-- **Seleccionar pedido**: Elección de un pedido específico para su gestión.
-- **Cotizar**: Generación de una cotización detallada para el pedido seleccionado.
-- **Enviar presupuesto a revisión / Aprobar presupuesto**: Revisión y aprobación del presupuesto generado.
-- **Enviar presupuesto PDF a cliente**: Envío del presupuesto aprobado al cliente en formato PDF.
-- **Confirmar pedido**: Confirmación del pedido por parte del cliente.
-- **Enviar a producción**: Inicio del proceso de producción del pedido confirmado.
-- **Asignar mano de obra que se encargará de fabricar el pedido**: Asignación de tareas específicas a los trabajadores, utilizando una interfaz que permite seleccionar el personal adecuado para cada tarea del pedido.
+### 1. 'Customers' Section:
+- **Enter customer**: Register new customers in the system.
+- **Enter order**: Create orders associated with registered customers.
 
-### 3. Sección 'Producción':
-- **Descargar OT (Orden de Trabajo)**: Descarga de la OT al hacer clic en el estado del trabajo (Pendiente), iniciando oficialmente la tarea asignada.
-- **Marcar el trabajo como terminado**: Actualización del estado del trabajo una vez completado.
-- **Cerrar el pedido**: Finalización del pedido cuando todos los trabajos asociados están terminados.
+### 2. 'Orders' Section:
+- **Select order**: Choose a specific order for management.
+- **Quote**: Generate a detailed quote for the selected order.
+- **Submit budget for review / Approve budget**: Review and approve the generated budget.
+- **Send budget PDF to the client**: Send the approved budget to the client in PDF format.
+- **Confirm order**: Customer confirmation of the order.
+- **Send to production**: Initiate the production process for the confirmed order.
+- **Assign labor for order fabrication**: Assignment of specific tasks to workers, using an interface that allows selecting the appropriate personnel for each task of the order.
 
-### 4. Sección 'Trabajos':
-- **Marcar como pagados los trabajos terminados**: Registro de los pagos a los trabajadores por los trabajos completados.
+### 3. 'Production' Section:
+- **Download Work Order (WO)**: Download the WO by clicking on the job status (Pending), officially starting the assigned task.
+- **Mark job as completed**: Update the job status once completed.
+- **Close the order**: Completion of the order when all associated jobs are finished.
 
-### Otras opciones:
-- **Sección 'Base de datos'**: Acceso y gestión de toda la información relacionada con los pedidos, incluyendo opciones de edición y cambio de estado.
-- **Sección 'Reportes'**: Generación de informes sobre el programa, incluyendo logs de usuario, informes de ventas y rentabilidad, información sobre abonos, y la capacidad de descargar datos para análisis en Excel.
+### 4. 'Jobs' Section:
+- **Mark completed jobs as paid**: Record payments to workers for completed jobs.
 
-## Tecnologías y Habilidades
+### Other Options:
+- **'Database' Section**: Access and manage all information related to orders, including editing options and status changes.
+- **'Reports' Section**: Generate reports on the program, including user logs, sales and profitability reports, deposit information, and the ability to download data for Excel analysis.
 
-- **Django**: Uso avanzado del framework para crear una aplicación web robusta y escalable.
-- **Python**: Aplicación de buenas prácticas de programación y patrones de diseño.
-- **Gestión de Bases de Datos**: Diseño e implementación de modelos de datos eficientes para el manejo de la producción y los pedidos.
-- **Desarrollo Frontend**: Integración de interfaces de usuario intuitivas utilizando HTML, CSS y JavaScript.
-- **Seguridad Web**: Implementación de medidas de seguridad para proteger la información y las transacciones.
-- **Automatización y Mejora de Procesos**: Automatización de tareas repetitivas y mejora de los flujos de trabajo de producción.
+## Technologies and Skills
 
-### Link demo: http://44.220.148.179
-   - **Usuario: visitante**
-   - **Pass: usuario1**
+- **Django**: Advanced use of the framework to create a robust and scalable web application.
+- **Python**: Application of programming best practices and design patterns.
+- **Database Management**: Design and implementation of efficient data models for production and orders handling.
+- **Frontend Development**: Integration of intuitive user interfaces using HTML, CSS, and JavaScript.
+- **Web Security**: Implementation of security measures to protect information and transactions.
+- **Automation and Process Improvement**: Automation of repetitive tasks and improvement of production workflows.
+
+### Demo Link: [Innanet Demo](https://innanet.fgrob.cl)
+   - **Username: guest**
+   - **Password: user1234**
      
-## Capturas de pantalla
+## Screenshots
 <img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Home.png?raw=true" width="200" height="100"></img>
 <img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Home-modal.png?raw=true" width="200" height="100"></img>
 <img src="https://github.com/fgrob/innanet-demo/blob/main/Screenshots/Presupuesto.png?raw=true" width="200" height="100"></img>
